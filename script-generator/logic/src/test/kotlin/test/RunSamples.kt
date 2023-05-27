@@ -59,7 +59,7 @@ class RunSamples : FunSpec(
         context("Generate Kotlin files") {
 
             sampleFiles.forEach { sample ->
-                test("/samples/${sample.name}") {
+                test("/samples/${sample.nameWithoutExtension}.kt from yaml") {
                     val regex = "[A-Z][A-Za-z0-9]+\\.(yaml|yml)".toRegex()
                     sample.name.shouldMatch(regex)
 

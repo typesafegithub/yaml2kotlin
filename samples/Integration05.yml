@@ -1,0 +1,51 @@
+
+# This file was generated using Kotlin DSL (.github/workflows/some_workflow.main.kts).
+# If you want to modify the workflow, please change the Kotlin file and regenerate this YAML file.
+# Generated with https://github.com/typesafegithub/github-workflows-kt
+
+name: 'Overridden name!'
+on:
+  push: {}
+env:
+  SIMPLE_VAR: 'simple-value-workflow'
+  MULTILINE_VAR: |-
+    hey,
+    hi,
+    hello! workflow
+foo-bar: 'baz'
+jobs:
+  test_job:
+    runs-on: 'ubuntu-latest'
+    env:
+      SIMPLE_VAR: 'simple-value-job'
+      MULTILINE_VAR: |-
+        hey,
+        hi,
+        hello! job
+    if: ${{ always() }}
+    baz-goo: 123
+    null-string: 'null'
+    null-value: null
+    empty-string: ''
+    steps:
+      - id: 'step-0'
+        name: 'Check out'
+        continue-on-error: true
+        uses: 'actions/checkout@v3'
+        env:
+          SIMPLE_VAR: 'simple-value-uses'
+          MULTILINE_VAR: |-
+            hey,
+            hi,
+            hello! uses
+      - id: 'step-1'
+        name: 'Hello world!'
+        env:
+          SIMPLE_VAR: 'simple-value-run'
+          MULTILINE_VAR: |-
+            hey,
+            hi,
+            hello! run
+        continue-on-error: true
+        run: 'echo ''hello!'''
+

@@ -1,0 +1,13 @@
+# Test preamble
+# with a second line
+
+name: 'test'
+on:
+  push: { }
+jobs:
+  test:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - id: 'step-0'
+        run: 'echo ''Hello!'''
+
