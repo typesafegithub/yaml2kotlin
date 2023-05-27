@@ -1,14 +1,11 @@
 package io.github.typesafegithub.workflows.actionsmetadata
 
 import com.charleskorn.kaml.Yaml
-import io.github.typesafegithub.workflows.actionsmetadata.model.ActionCoords
-import io.github.typesafegithub.workflows.actionsmetadata.model.ActionTypes
-import io.github.typesafegithub.workflows.actionsmetadata.model.TypingsSource
-import io.github.typesafegithub.workflows.actionsmetadata.model.WrapperRequest
-import io.github.typesafegithub.workflows.actionsmetadata.model.prettyPrint
+import io.github.typesafegithub.workflows.actionsmetadata.model.*
 import kotlinx.serialization.decodeFromString
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.exists
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.name
 import kotlin.io.path.readText
@@ -20,8 +17,11 @@ internal fun readActionsMetadata(): List<WrapperRequest> =
         .sortedBy { it.actionCoords.prettyPrint.lowercase() }
 
 private fun readLocalActionTypings(): List<WrapperRequest> {
-    val actionTypingsDirectory = Path.of("actions")
-
+    //FIXME remove work-around
+    var actionTypingsDirectory = Path.of("actions")
+    if (actionTypingsDirectory.exists().not()) {
+        actionTypingsDirectory = Path.of("/Users/jmfayard/projects/jmfayard/github-workflows-kt/actions")
+    }
     return Files.walk(actionTypingsDirectory).asSequence()
         .filter { it.isRegularFile() }
         .filter { it.name !in setOf("commit-hash.txt") }
@@ -63,6 +63,7 @@ private fun buildTypingsSource(
         }
         TypingsSource.WrapperGenerator(inputTypings = typings.toTypesMap())
     }
+
     "typings-hosted-by-action" -> TypingsSource.ActionTypes
     else -> error("An unexpected file found in $actionTypingsDirectory: '$fileName'")
 }
