@@ -54,7 +54,7 @@ class RunSamples : FunSpec(
             val kotlinFiles = files.filter {
                 var name = it.name
                 Conventions.kotlinSuffixes.forEach { name = name.removeSuffix(it) }
-                it.extension == "kt" && name !in inputFiles
+                it.extension == "kt" && name !in inputFiles && name.isNotBlank()
             }.map { it.name }
             kotlinFiles shouldBe emptyList()
         }
@@ -117,7 +117,7 @@ object Conventions {
     val yamlSuffixes = setOf("yml", "yaml")
     const val actual = "actual"
     const val expected = "expected"
-    val kotlinSuffixes = setOf("Expected.kt", "Actual.kt")
+    val kotlinSuffixes = setOf("Expected.kt", "Actual.kt", "_ALL_.kt")
     val actualPackage = "package $actual"
     val expectedPackage = "package $expected"
     val workflowsFile = samples.resolve("_ALL_.kt")

@@ -9,7 +9,7 @@ import io.github.typesafegithub.workflows.dsl.workflow
 import io.github.typesafegithub.workflows.yaml.toYaml
 import io.github.typesafegithub.workflows.yaml.writeToFile
 import java.nio.`file`.Paths
-import kotlin.Any
+import kotlin.collections.listOf
 import kotlin.collections.mapOf
 
 public val workflowNodejspackagegeneratedYml: Workflow = workflow(

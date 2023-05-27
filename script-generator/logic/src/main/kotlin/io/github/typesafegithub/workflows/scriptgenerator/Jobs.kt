@@ -64,7 +64,7 @@ private fun YamlJob.customArguments(): CodeBlock {
         postfix = ")",
         transform = { key, list ->
             list.joinToCode(
-                prefix = CodeBlock.of("%S to listOf(", key),
+                prefix = CodeBlock.of("%S to %M(", key, Members.listOf),
                 separator = ", ",
                 postfix = "),\n",
                 newLineAtEnd = false,
