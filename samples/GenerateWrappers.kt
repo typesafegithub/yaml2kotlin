@@ -11,14 +11,14 @@ import java.nio.`file`.Paths
 import kotlin.collections.listOf
 import kotlin.collections.mapOf
 
-public val workflowGeneratewrappersgeneratedYml: Workflow = workflow(
+public val workflowGeneratewrappers: Workflow = workflow(
       name = "Generate wrappers",
       on = listOf(
         Push(
           branchesIgnore = listOf("main"),
         ),
         ),
-      sourceFile = Paths.get(".github/workflows/generatewrappersgenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/generatewrappers.main.kts"),
     ) {
       job(
         id = "check_yaml_consistency",

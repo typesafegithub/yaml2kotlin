@@ -12,7 +12,7 @@ import io.github.typesafegithub.workflows.yaml.writeToFile
 import java.nio.`file`.Paths
 import kotlin.collections.mapOf
 
-public val workflowRefreshversionsprgeneratedYml: Workflow = workflow(
+public val workflowRefreshversionspr: Workflow = workflow(
       name = "RefreshVersions Pr",
       on = listOf(
         Schedule(listOf(
@@ -20,7 +20,7 @@ public val workflowRefreshversionsprgeneratedYml: Workflow = workflow(
         )),
         WorkflowDispatch(),
         ),
-      sourceFile = Paths.get(".github/workflows/refreshversionsprgenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/refreshversionspr.main.kts"),
     ) {
       job(
         id = "Refresh-Versions",

@@ -10,14 +10,14 @@ import io.github.typesafegithub.workflows.yaml.writeToFile
 import java.nio.`file`.Paths
 import kotlin.collections.mapOf
 
-public val workflowSemanticreleasegeneratedYml: Workflow = workflow(
+public val workflowSemanticrelease: Workflow = workflow(
       name = "Semantic release",
       on = listOf(
         Push(
           branches = listOf("master"),
         ),
         ),
-      sourceFile = Paths.get(".github/workflows/semanticreleasegenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/semanticrelease.main.kts"),
     ) {
       job(
         id = "publish",

@@ -12,7 +12,7 @@ import java.nio.`file`.Paths
 import kotlin.collections.listOf
 import kotlin.collections.mapOf
 
-public val workflowNodejspackagegeneratedYml: Workflow = workflow(
+public val workflowNodejspackage: Workflow = workflow(
       name = "NodeJs Package",
       on = listOf(
         Release(
@@ -21,7 +21,7 @@ public val workflowNodejspackagegeneratedYml: Workflow = workflow(
           ),
         ),
         ),
-      sourceFile = Paths.get(".github/workflows/nodejspackagegenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/nodejspackage.main.kts"),
       concurrency = Concurrency(group = "workflow_staging_environment", cancelInProgress = false),
     ) {
       job(

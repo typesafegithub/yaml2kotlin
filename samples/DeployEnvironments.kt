@@ -13,14 +13,14 @@ import java.nio.`file`.Paths
 import kotlin.collections.listOf
 import kotlin.collections.mapOf
 
-public val workflowDeployenvironmentsgeneratedYml: Workflow = workflow(
+public val workflowDeployenvironments: Workflow = workflow(
       name = "Deploy Environments",
       on = listOf(
         PullRequest(),
         Push(),
         WorkflowDispatch(),
         ),
-      sourceFile = Paths.get(".github/workflows/deployenvironmentsgenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/deployenvironments.main.kts"),
     ) {
       job(
         id = "build",

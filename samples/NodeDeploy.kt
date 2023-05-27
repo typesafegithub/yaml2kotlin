@@ -10,14 +10,14 @@ import io.github.typesafegithub.workflows.yaml.writeToFile
 import java.nio.`file`.Paths
 import kotlin.collections.mapOf
 
-public val workflowNodedeploygeneratedYml: Workflow = workflow(
+public val workflowNodedeploy: Workflow = workflow(
       name = "Node Deploy",
       on = listOf(
         Push(
           branches = listOf("master"),
         ),
         ),
-      sourceFile = Paths.get(".github/workflows/nodedeploygenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/nodedeploy.main.kts"),
     ) {
       job(
         id = "build-and-deploy",

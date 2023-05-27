@@ -13,7 +13,7 @@ import java.nio.`file`.Paths
 import kotlin.collections.listOf
 import kotlin.collections.mapOf
 
-public val workflowUpdategradlewrappergeneratedYml: Workflow = workflow(
+public val workflowUpdategradlewrapper: Workflow = workflow(
       name = "Update Gradle Wrapper",
       on = listOf(
         Schedule(listOf(
@@ -21,7 +21,7 @@ public val workflowUpdategradlewrappergeneratedYml: Workflow = workflow(
         )),
         WorkflowDispatch(),
         ),
-      sourceFile = Paths.get(".github/workflows/updategradlewrappergenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/updategradlewrapper.main.kts"),
     ) {
       job(
         id = "check_yaml_consistency",

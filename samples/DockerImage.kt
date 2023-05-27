@@ -12,7 +12,7 @@ import java.nio.`file`.Paths
 import kotlin.collections.linkedMapOf
 import kotlin.collections.mapOf
 
-public val workflowDockerimagegeneratedYml: Workflow = workflow(
+public val workflowDockerimage: Workflow = workflow(
       name = "Docker Image",
       on = listOf(
         PullRequest(
@@ -22,7 +22,7 @@ public val workflowDockerimagegeneratedYml: Workflow = workflow(
           branches = listOf("main"),
         ),
         ),
-      sourceFile = Paths.get(".github/workflows/dockerimagegenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/dockerimage.main.kts"),
       env = linkedMapOf(
         "REGISTRY" to "ghcr.io",
         "IMAGE_NAME" to expr("github.repository"),

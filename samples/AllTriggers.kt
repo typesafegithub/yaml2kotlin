@@ -45,7 +45,7 @@ import java.nio.`file`.Paths
 import kotlin.collections.listOf
 import kotlin.collections.mapOf
 
-public val workflowAlltriggersgeneratedYml: Workflow = workflow(
+public val workflowAlltriggers: Workflow = workflow(
       name = "all-triggers",
       on = listOf(
         PullRequest(),
@@ -145,7 +145,7 @@ public val workflowAlltriggersgeneratedYml: Workflow = workflow(
           ),
         ),
         ),
-      sourceFile = Paths.get(".github/workflows/alltriggersgenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/alltriggers.main.kts"),
     ) {
       job(
         id = "job-0",

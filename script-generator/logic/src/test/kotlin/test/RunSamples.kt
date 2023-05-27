@@ -2,7 +2,6 @@ package test
 
 import io.github.typesafegithub.workflows.scriptgenerator.decodeYamlWorkflow
 import io.github.typesafegithub.workflows.scriptgenerator.toFileSpec
-import io.github.typesafegithub.workflows.scriptgenerator.workFlowProperty
 import io.github.typesafegithub.workflows.scriptgenerator.workflowVariableName
 import io.github.typesafegithub.workflows.scriptmodel.YamlWorkflow
 import io.github.typesafegithub.workflows.yaml.writeToFile
@@ -30,14 +29,6 @@ class RunSamples : FunSpec(
             it.extension in Conventions.yamlSuffixes
         }
 
-        test("Kotlin files must end in ${Conventions.kotlinSuffixes}") {
-            val kotlinFiles = files.filter { it.extension == "kt" }
-            val invalid = kotlinFiles.filter { file ->
-                Conventions.kotlinSuffixes.none { file.name.endsWith(it) }
-            }
-            invalid.shouldBeEmpty()
-        }
-
         test("Kotlin files - fix package actual => expected") {
             val expected = files.filter { it.nameWithoutExtension.endsWith("Expected") }
             expected.forEach { file ->
@@ -52,23 +43,20 @@ class RunSamples : FunSpec(
                 }
                 .toSet()
             val kotlinFiles = files.filter {
-                var name = it.name
-                Conventions.kotlinSuffixes.forEach { name = name.removeSuffix(it) }
-                it.extension == "kt" && name !in inputFiles && name.isNotBlank()
+                it.extension == "kt" && it.nameWithoutExtension !in inputFiles && it != Conventions.workflowsFile
             }.map { it.name }
             kotlinFiles shouldBe emptyList()
         }
 
         test("Generate workflow files") {
             val workflowVariableNames = sampleFiles.map {
-                workflowVariableName(it.nameWithoutExtension + "generated-${it.extension}")
+                workflowVariableName(it.nameWithoutExtension)
             }
 
             Conventions.workflowsFile.writeText(workflowsList(workflowVariableNames))
         }
 
         context("Generate Kotlin files") {
-            val UPDATE_FILES = false // only use if you plan make massive changes in the files
 
             sampleFiles.forEach { sample ->
                 test("/samples/${sample.name}") {
@@ -79,22 +67,19 @@ class RunSamples : FunSpec(
                     withClue(input) {
                         val yaml = input.yamlFile.readText()
                         val workflow: YamlWorkflow = decodeYamlWorkflow(yaml)
-                        val newContent = workflow.toFileSpec(input.generatedYaml).toString()
+                        val newContent = workflow
+                            .toFileSpec(input.filename)
+                            .toString()
                             .withoutPackages()
 
-                        input.actualFile.writeText(
-                                "package actual\n$newContent"
+                        input.kotlinFile.writeText(
+                                "package expected\n$newContent"
                         )
 
                         if (isGitHubActions()) {
                             newContent shouldBe input.expected
-                        } else if (UPDATE_FILES) {
-                            input.expectedFile.writeText("package expected\n$newContent",)
-                            input.actualFile.delete()
-                        } else if (newContent == input.expected) {
-                            input.actualFile.delete()
-                        } else {
-                            fail("${input.expectedFile.name} != ${input.actualFile.name} in ${input.actualFile.parentFile.canonicalPath}")
+                        } else if (newContent != input.expected){
+                            fail("Double-check changes to samples/${input.kotlinFile.name}")
                         }
                     }
                 }
@@ -117,7 +102,6 @@ object Conventions {
     val yamlSuffixes = setOf("yml", "yaml")
     const val actual = "actual"
     const val expected = "expected"
-    val kotlinSuffixes = setOf("Expected.kt", "Actual.kt", "_ALL_.kt")
     val actualPackage = "package $actual"
     val expectedPackage = "package $expected"
     val workflowsFile = samples.resolve("_ALL_.kt")
@@ -129,15 +113,12 @@ data class SampleInput(val yamlFile: File) {
     }
 
     val filename = yamlFile.nameWithoutExtension
-    val generatedYaml = yamlFile.nameWithoutExtension + "Generated." + yamlFile.extension
     fun file(path: String) = samples.resolve(path)
 
-    val expectedFile = samples.resolve("${filename}Expected.kt")
-    val actualFile = samples.resolve("${filename}Actual.kt")
+    val kotlinFile = samples.resolve("$filename.kt")
 
-    val expected = if (expectedFile.canRead()) {
-        expectedFile.readText()
-            .withoutPackages()
+    val expected = if (kotlinFile.canRead()) {
+        kotlinFile.readText().withoutPackages()
     } else {
         ""
     }

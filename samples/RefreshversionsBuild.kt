@@ -15,7 +15,7 @@ import java.nio.`file`.Paths
 import kotlin.collections.listOf
 import kotlin.collections.mapOf
 
-public val workflowRefreshversionsbuildgeneratedYml: Workflow = workflow(
+public val workflowRefreshversionsbuild: Workflow = workflow(
       name = "RefreshVersions build",
       on = listOf(
         PullRequest(
@@ -74,7 +74,7 @@ public val workflowRefreshversionsbuildgeneratedYml: Workflow = workflow(
           ),
         ))
         ),
-      sourceFile = Paths.get(".github/workflows/refreshversionsbuildgenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/refreshversionsbuild.main.kts"),
     ) {
       job(
         id = "check-all",

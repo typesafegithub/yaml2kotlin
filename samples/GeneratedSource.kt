@@ -18,7 +18,7 @@ import kotlin.collections.linkedMapOf
 import kotlin.collections.listOf
 import kotlin.collections.mapOf
 
-public val workflowGeneratedsourcegeneratedYml: Workflow = workflow(
+public val workflowGeneratedsource: Workflow = workflow(
       name = "generated",
       on = listOf(
         PullRequest(
@@ -45,7 +45,7 @@ public val workflowGeneratedsourcegeneratedYml: Workflow = workflow(
           ),
         ))
         ),
-      sourceFile = Paths.get(".github/workflows/generatedsourcegenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/generatedsource.main.kts"),
       env = linkedMapOf(
         "GRADLE_ENTERPRISE_ACCESS_KEY" to expr("secrets.GRADLE_ENTERPRISE_ACCESS_KEY"),
         "GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED" to "true",

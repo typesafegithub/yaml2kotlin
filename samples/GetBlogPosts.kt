@@ -12,7 +12,7 @@ import io.github.typesafegithub.workflows.yaml.writeToFile
 import java.nio.`file`.Paths
 import kotlin.collections.mapOf
 
-public val workflowGetblogpostsgeneratedYml: Workflow = workflow(
+public val workflowGetblogposts: Workflow = workflow(
       name = "Get latest blog posts",
       on = listOf(
         Schedule(listOf(
@@ -20,7 +20,7 @@ public val workflowGetblogpostsgeneratedYml: Workflow = workflow(
         )),
         WorkflowDispatch(),
         ),
-      sourceFile = Paths.get(".github/workflows/getblogpostsgenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/getblogposts.main.kts"),
     ) {
       job(
         id = "update_profile_data",

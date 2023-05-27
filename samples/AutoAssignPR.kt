@@ -11,7 +11,7 @@ import java.nio.`file`.Paths
 import kotlin.collections.listOf
 import kotlin.collections.mapOf
 
-public val workflowAutoassignprgeneratedYml: Workflow = workflow(
+public val workflowAutoassignpr: Workflow = workflow(
       name = "auto-assign pr",
       on = listOf(
         Issues(
@@ -20,7 +20,7 @@ public val workflowAutoassignprgeneratedYml: Workflow = workflow(
           ),
         ),
         ),
-      sourceFile = Paths.get(".github/workflows/autoassignprgenerated.yml.main.kts"),
+      sourceFile = Paths.get(".github/workflows/autoassignpr.main.kts"),
     ) {
       job(
         id = "auto-assign",
