@@ -16,6 +16,14 @@ fun YamlWorkflow.toFileSpec(filenameFromUrl: String?) = FileSpec.builder("", "$n
     .addProperty(workFlowProperty(filenameFromUrl))
     .build()
 
+fun workflowVariableName(filenameFromUrl: String): String {
+    val filename = filenameFromUrl
+        .removeSuffix(".yml")
+        .removeSuffix(".yaml")
+        .lowercase().replace(" ", "-").toPascalCase()
+    return "workflow$filename"
+}
+
 fun YamlWorkflow.workFlowProperty(filenameFromUrl: String?): PropertySpec {
     val filename = (filenameFromUrl ?: name).lowercase().replace(" ", "-")
 

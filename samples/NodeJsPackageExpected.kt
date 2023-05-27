@@ -17,7 +17,7 @@ public val workflowNodejspackagegeneratedYml: Workflow = workflow(
       on = listOf(
         Release(
           _customArguments = mapOf(
-            "types" to Any("created")
+            "types" to listOf("created")
           ),
         ),
         ),

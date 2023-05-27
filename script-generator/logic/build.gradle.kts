@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.builtins.StandardNames.FqNames.set
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.tasks.ConfigurableKtLintTask
 
@@ -33,4 +35,10 @@ tasks.withType<KotlinCompile> {
             "-opt-in=io.github.typesafegithub.workflows.internal.InternalGithubActionsApi",
         )
     }
+}
+
+
+sourceSets {
+    val srcDirs = listOf(File("src/test"), rootProject.file("samples"))
+    test.get().kotlin.setSrcDirs(srcDirs)
 }

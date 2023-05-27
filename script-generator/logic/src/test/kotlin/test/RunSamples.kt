@@ -2,10 +2,9 @@ package test
 
 import io.github.typesafegithub.workflows.scriptgenerator.decodeYamlWorkflow
 import io.github.typesafegithub.workflows.scriptgenerator.toFileSpec
-import io.github.typesafegithub.workflows.scriptgenerator.yamlToKotlinScript
+import io.github.typesafegithub.workflows.scriptgenerator.workFlowProperty
+import io.github.typesafegithub.workflows.scriptgenerator.workflowVariableName
 import io.github.typesafegithub.workflows.scriptmodel.YamlWorkflow
-import io.github.typesafegithub.workflows.scriptmodel.myYaml
-import io.github.typesafegithub.workflows.scriptmodel.normalizeYaml
 import io.github.typesafegithub.workflows.yaml.writeToFile
 import io.kotest.assertions.fail
 import io.kotest.assertions.withClue
@@ -15,8 +14,6 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
-import kotlinx.serialization.decodeFromString
-import java.awt.SystemColor.text
 import java.io.File
 
 @Suppress("UNUSED_VARIABLE")
@@ -62,8 +59,16 @@ class RunSamples : FunSpec(
             kotlinFiles shouldBe emptyList()
         }
 
+        test("Generate workflow files") {
+            val workflowVariableNames = sampleFiles.map {
+                workflowVariableName(it.nameWithoutExtension + "generated-${it.extension}")
+            }
+
+            Conventions.workflowsFile.writeText(workflowsList(workflowVariableNames))
+        }
+
         context("Generate Kotlin files") {
-            val UPDATE_FILES = true // only use if you plan make massive changes in the files
+            val UPDATE_FILES = false // only use if you plan make massive changes in the files
 
             sampleFiles.forEach { sample ->
                 test("/samples/${sample.name}") {
@@ -75,6 +80,7 @@ class RunSamples : FunSpec(
                         val yaml = input.yamlFile.readText()
                         val workflow: YamlWorkflow = decodeYamlWorkflow(yaml)
                         val newContent = workflow.toFileSpec(input.generatedYaml).toString()
+                            .withoutPackages()
 
                         input.actualFile.writeText(
                                 "package actual\n$newContent"
@@ -99,7 +105,7 @@ class RunSamples : FunSpec(
             val gitRootDir = tempdir().also {
                 it.resolve(".git").mkdirs()
             }.toPath()
-            allWorkflows.forEach {
+            expected.allWorkflows.forEach {
                 it.copy(sourceFile = gitRootDir.resolve(it.sourceFile))
                     .writeToFile(addConsistencyCheck = false)
             }
@@ -114,6 +120,7 @@ object Conventions {
     val kotlinSuffixes = setOf("Expected.kt", "Actual.kt")
     val actualPackage = "package $actual"
     val expectedPackage = "package $expected"
+    val workflowsFile = samples.resolve("_ALL_.kt")
 }
 
 data class SampleInput(val yamlFile: File) {
@@ -142,3 +149,14 @@ private fun String.withoutPackages() =
         .removePrefix("\n")
         .removeWindowsEndings()
         .removeSuffix("\n")
+
+
+fun workflowsList(kotlinVariables: List<String>) = """
+package expected
+
+import io.github.typesafegithub.workflows.domain.Workflow
+
+val allWorkflows: List<Workflow> = listOf(
+${kotlinVariables.joinToString(",\n   ", prefix = "     ")}
+)
+"""

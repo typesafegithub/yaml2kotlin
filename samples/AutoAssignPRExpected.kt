@@ -16,7 +16,7 @@ public val workflowAutoassignprgeneratedYml: Workflow = workflow(
       on = listOf(
         Issues(
           _customArguments = mapOf(
-            "types" to Any("opened")
+            "types" to listOf("opened")
           ),
         ),
         ),
