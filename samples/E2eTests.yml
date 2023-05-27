@@ -1,0 +1,25 @@
+# https://dev.to/iphiee_oma/continuous-integration-for-end-to-end-tests-with-cypress-and-github-actions-19a5
+name: E2E tests
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+    branches:
+      - develop
+    schedule:
+      - cron: "*/5 * * * *"
+jobs:
+  cypress-run:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup npm package
+        run: npm install
+      - name: Run E2E test
+        uses: cypress-io/github-action@v1
+        with:
+          config: baseUrl=https://seedxb.com

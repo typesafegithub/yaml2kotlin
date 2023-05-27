@@ -1,0 +1,14 @@
+#https://dev.to/this-is-learning/github-actions-basics-12em
+name: auto-assign pr
+on:
+  issues:
+    types: [opened]
+jobs:
+  auto-assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Auto-assign PR'
+        uses: pozil/auto-assign-issue@v1
+        with:
+          assignees: deraowl
+          repo-token: ${{ secrets.GITHUB_TOKEN }}

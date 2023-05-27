@@ -1,0 +1,22 @@
+# https://dev.to/brunodrugowick/update-your-github-pages-website-with-posts-from-devto-ein
+name: Update Articles
+
+on:
+  schedule:
+    - cron:  '30 23 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run script to get articles from dev.to
+        run: |
+          ./scripts/post_files_from_GET_json.sh
+
+      - name: Commit to the repo
+        run: |
+          git config --global user.name 'Bruno Drugowick'
