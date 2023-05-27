@@ -1,8 +1,4 @@
 package expected
-#!/usr/bin/env kotlin
-
-@file:DependsOn("io.github.typesafegithub:github-workflows-kt:0.44.0-SNAPSHOT")
-
 import io.github.typesafegithub.workflows.domain.RunnerType
 import io.github.typesafegithub.workflows.domain.Workflow
 import io.github.typesafegithub.workflows.domain.actions.CustomAction
@@ -99,15 +95,13 @@ public val workflowGeneratewrappersgeneratedYml: Workflow = workflow(
         run(
           name = "Commit and push",
           command = """
-git config --global user.email "<>"
-git config --global user.name "GitHub Actions Bot"
-git add .
-git commit --allow-empty -m "Regenerate wrappers (${'$'}GITHUB_SHA)"  # an empty commit explicitly shows that the wrappers are up-to-date
-git push
-""".trimMargin(),
+          |git config --global user.email "<>"
+          |git config --global user.name "GitHub Actions Bot"
+          |git add .
+          |git commit --allow-empty -m "Regenerate wrappers (${'$'}GITHUB_SHA)"  # an empty commit explicitly shows that the wrappers are up-to-date
+          |git push
+          |""".trimMargin(),
         )
       }
 
     }
-
-workflowGenerateWrappersGeneratedYml.writeToFile()

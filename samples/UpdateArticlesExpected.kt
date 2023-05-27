@@ -1,8 +1,4 @@
 package expected
-#!/usr/bin/env kotlin
-
-@file:DependsOn("io.github.typesafegithub:github-workflows-kt:0.44.0-SNAPSHOT")
-
 import io.github.typesafegithub.workflows.domain.RunnerType
 import io.github.typesafegithub.workflows.domain.Workflow
 import io.github.typesafegithub.workflows.domain.actions.CustomAction
@@ -40,8 +36,8 @@ public val workflowUpdatearticlesgeneratedYml: Workflow = workflow(
         run(
           name = "Run script to get articles from dev.to",
           command = """
-./scripts/post_files_from_GET_json.sh
-""".trimMargin(),
+          |./scripts/post_files_from_GET_json.sh
+          |""".trimMargin(),
         )
         run(
           name = "Commit to the repo",
@@ -50,5 +46,3 @@ public val workflowUpdatearticlesgeneratedYml: Workflow = workflow(
       }
 
     }
-
-workflowUpdateArticlesGeneratedYml.writeToFile()

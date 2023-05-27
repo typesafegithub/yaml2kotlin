@@ -1,8 +1,4 @@
 package expected
-#!/usr/bin/env kotlin
-
-@file:DependsOn("io.github.typesafegithub:github-workflows-kt:0.44.0-SNAPSHOT")
-
 import io.github.typesafegithub.workflows.domain.RunnerType
 import io.github.typesafegithub.workflows.domain.Workflow
 import io.github.typesafegithub.workflows.domain.actions.CustomAction
@@ -53,10 +49,10 @@ public val workflowGetblogpostsgeneratedYml: Workflow = workflow(
         run(
           name = "Get blog posts",
           command = """
-npm install
-node --experimental-fetch bin/generateDevToPosts.js
-node bin/generateHashnodeUrlMapping.js
-""".trimMargin(),
+          |npm install
+          |node --experimental-fetch bin/generateDevToPosts.js
+          |node bin/generateHashnodeUrlMapping.js
+          |""".trimMargin(),
           env = linkedMapOf(
             "DEV_API_KEY" to expr("secrets.DEV_API_KEY"),
           ),
@@ -64,15 +60,15 @@ node bin/generateHashnodeUrlMapping.js
         run(
           name = "Commit changes",
           command = """
-git config user.name "GitHub Actions Bot"
-git config user.email "<>"
-git pull origin main
-git add .
-if [[ -n "${'$'}(git status --porcelain)" ]]; then
-  git commit -m "chore (automated): update blog posts"
-  git push origin main
-fi
-""".trimMargin(),
+          |git config user.name "GitHub Actions Bot"
+          |git config user.email "<>"
+          |git pull origin main
+          |git add .
+          |if [[ -n "${'$'}(git status --porcelain)" ]]; then
+          |  git commit -m "chore (automated): update blog posts"
+          |  git push origin main
+          |fi
+          |""".trimMargin(),
           env = linkedMapOf(
             "GITHUB_TOKEN" to expr("secrets.GITHUB_TOKEN"),
           ),
@@ -80,5 +76,3 @@ fi
       }
 
     }
-
-workflowGetBlogPostsGeneratedYml.writeToFile()

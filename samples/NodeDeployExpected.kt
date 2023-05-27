@@ -1,8 +1,4 @@
 package expected
-#!/usr/bin/env kotlin
-
-@file:DependsOn("io.github.typesafegithub:github-workflows-kt:0.44.0-SNAPSHOT")
-
 import io.github.typesafegithub.workflows.domain.RunnerType
 import io.github.typesafegithub.workflows.domain.Workflow
 import io.github.typesafegithub.workflows.domain.actions.CustomAction
@@ -56,17 +52,17 @@ public val workflowNodedeploygeneratedYml: Workflow = workflow(
               "path" to "~/.npm",
               "key" to "${'$'}{{ runner.os }}-node-${'$'}{{ hashFiles('**/package-lock.json') }}",
               "restore-keys" to """
-${'$'}{{ runner.os }}-node-
-""".trimMargin(),
+              |${'$'}{{ runner.os }}-node-
+              |""".trimMargin(),
             )
           ),
         )
         run(
           name = "Build",
           command = """
-npm install
-npm run-script deploy
-""".trimMargin(),
+          |npm install
+          |npm run-script deploy
+          |""".trimMargin(),
         )
         uses(
           name = "Deploy",
@@ -84,5 +80,3 @@ npm run-script deploy
       }
 
     }
-
-workflowNodeDeployGeneratedYml.writeToFile()

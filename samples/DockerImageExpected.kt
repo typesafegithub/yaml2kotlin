@@ -1,8 +1,4 @@
 package expected
-#!/usr/bin/env kotlin
-
-@file:DependsOn("io.github.typesafegithub:github-workflows-kt:0.44.0-SNAPSHOT")
-
 import io.github.typesafegithub.workflows.domain.RunnerType
 import io.github.typesafegithub.workflows.domain.Workflow
 import io.github.typesafegithub.workflows.domain.actions.CustomAction
@@ -85,5 +81,3 @@ public val workflowDockerimagegeneratedYml: Workflow = workflow(
       }
 
     }
-
-workflowDockerImageGeneratedYml.writeToFile()

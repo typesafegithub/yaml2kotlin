@@ -14,6 +14,6 @@ fun yamlToKotlinScript(yaml: String, filename: String? = null): String {
 fun URL.filename(): String =
     path.substringAfterLast("/").substringBefore(".")
 
-private fun decodeYamlWorkflow(text: String): YamlWorkflow {
+fun decodeYamlWorkflow(text: String): YamlWorkflow {
     return myYaml.decodeFromString(text.normalizeYaml())
 }
