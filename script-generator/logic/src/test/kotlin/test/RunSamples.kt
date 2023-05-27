@@ -9,7 +9,6 @@ import io.kotest.assertions.fail
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.engine.spec.tempdir
-import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
@@ -64,23 +63,21 @@ class RunSamples : FunSpec(
                     sample.name.shouldMatch(regex)
 
                     val input = SampleInput(sample)
-                    withClue(input) {
-                        val yaml = input.yamlFile.readText()
-                        val workflow: YamlWorkflow = decodeYamlWorkflow(yaml)
-                        val newContent = workflow
-                            .toFileSpec(input.filename)
-                            .toString()
-                            .withoutPackages()
+                    val yaml = input.yamlFile.readText()
+                    val workflow: YamlWorkflow = decodeYamlWorkflow(yaml)
+                    val newContent = workflow
+                        .toFileSpec(input.filename)
+                        .toString()
+                        .withoutPackages()
 
-                        input.kotlinFile.writeText(
-                                "package expected\n$newContent"
-                        )
+                    input.kotlinFile.writeText(
+                        "package expected\n$newContent",
+                    )
 
-                        if (isGitHubActions()) {
-                            newContent shouldBe input.expected
-                        } else if (newContent != input.expected){
-                            fail("Double-check changes to samples/${input.kotlinFile.name}")
-                        }
+                    if (isGitHubActions()) {
+                        newContent shouldBe input.expected
+                    } else if (newContent != input.expected) {
+                        fail("Double-check changes to samples/${input.kotlinFile.name}")
                     }
                 }
             }

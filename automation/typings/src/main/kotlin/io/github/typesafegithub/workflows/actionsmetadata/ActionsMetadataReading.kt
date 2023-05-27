@@ -5,6 +5,7 @@ import io.github.typesafegithub.workflows.actionsmetadata.model.*
 import kotlinx.serialization.decodeFromString
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.absolutePathString
 import kotlin.io.path.exists
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.name
@@ -17,11 +18,11 @@ internal fun readActionsMetadata(): List<WrapperRequest> =
         .sortedBy { it.actionCoords.prettyPrint.lowercase() }
 
 private fun readLocalActionTypings(): List<WrapperRequest> {
-    //FIXME remove work-around
-    var actionTypingsDirectory = Path.of("actions")
-    if (actionTypingsDirectory.exists().not()) {
-        actionTypingsDirectory = Path.of("/Users/jmfayard/projects/jmfayard/github-workflows-kt/actions")
-    }
+    val dirs =  listOf(".", "..", "../..")
+    val actionTypingsDirectory = dirs
+        .map { Path.of(it, "actions") }
+        .first { it.exists() }
+
     return Files.walk(actionTypingsDirectory).asSequence()
         .filter { it.isRegularFile() }
         .filter { it.name !in setOf("commit-hash.txt") }
