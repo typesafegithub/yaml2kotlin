@@ -7,6 +7,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.exists
+import kotlin.io.path.extension
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.name
 import kotlin.io.path.readText
@@ -25,10 +26,11 @@ private fun readLocalActionTypings(): List<WrapperRequest> {
 
     return Files.walk(actionTypingsDirectory).asSequence()
         .filter { it.isRegularFile() }
-        .filter { it.name !in setOf("commit-hash.txt") }
+        .filter { it.name !in setOf("commit-hash.txt", ".DS_Store") }
         .map {
-            val pathParts = it.toFile().invariantSeparatorsPath.split("/")
+            val pathParts = it.toFile().invariantSeparatorsPath.split("/") - "."
             // pathParts[0] is "actions" directory
+            println("pathParts: $pathParts")
             val owner = pathParts[1]
             val name = pathParts[2]
             val version = pathParts[3]
