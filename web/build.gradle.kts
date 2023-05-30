@@ -38,7 +38,7 @@ tasks.processResources {
 tasks["sourcesJar"].dependsOn(tasks.processResources)
 
 val copyJsBundleToResources by tasks.registering(Copy::class) {
-    dependsOn(":yaml2kotlin:web:ui:build")
+    dependsOn(":web:ui:build")
     from("$rootDir/yaml2kotlin/web/ui/build/distributions")
     into(targetJsBundleDir)
 }
