@@ -1,5 +1,6 @@
-!!! warning "Experimental"
-    The script generator's development is in progress. Please expect missing features and other kinds of instabilities.
+# TODO: documentation is out of date
+
+ The script generator's development is in progress. Please expect missing features and other kinds of instabilities.
 
 If you have an existing working GitHub YAML workflow, the **script generator** can convert it to a Kotlin script! It may
 not produce the most readable or by any means final code (as with every code generator), but it's a good starting point
@@ -10,20 +11,20 @@ when you want to save time on migrating your workflows to YAML.
 To use it, clone the repository locally, in a version corresponding to the latest released version of the library:
 
 ```bash
-git clone -b v[[ scriptGeneratorVersion ]] https://github.com/typesafegithub/github-workflows-kt
+git clone -b v[[ kotlin2yamlVersion ]] https://github.com/typesafegithub/github-workflows-kt
 cd github-workflows-kt
 ```
 
 If you have your workflow available in a local file, run:
 
 ```bash
-./gradlew :script-generator:run --args /path/to/.github/workflows/build.yaml
+./gradlew :kotlin2yaml:run --args /path/to/.github/workflows/build.yaml
 ```
 
 If your YAML workflow is available publicly, e.g. on GitHub, use such command referring to the raw file:
 
 ```bash
-./gradlew :script-generator:run --args https://raw.githubusercontent.com/krzema12/github-actions-kotlin-dsl/0f41e3322a3e7de4199000fae54b398380eace2f/.github/workflows/build.yaml
+./gradlew :kotlin2yaml:run --args https://raw.githubusercontent.com/krzema12/github-actions-kotlin-dsl/0f41e3322a3e7de4199000fae54b398380eace2f/.github/workflows/build.yaml
 ```
 
 The script generator will communicate a successful generation and hint you what to do next:

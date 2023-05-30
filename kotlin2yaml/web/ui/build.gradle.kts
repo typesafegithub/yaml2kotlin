@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.scriptGenerator.web.api)
+    implementation(projects.kotlin2yaml.web.api)
 
     implementation(enforcedPlatform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.543"))
 

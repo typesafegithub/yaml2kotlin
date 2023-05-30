@@ -17,6 +17,7 @@ import mui.material.TextField
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.br
+import react.dom.html.ReactHTML.h1
 import react.dom.onChange
 import react.useEffect
 import react.useState
@@ -47,7 +48,16 @@ val App = FC<Props> {
         }
     }
 
-    +"YAML-to-Kotlin GitHub Actions workflows converter"
+    /**
+     * width: 100%;
+     * border: 1px solid #aaa;
+     * min-height: 350px;
+     * padding: 5px;
+     * margin-bottom: 10px;
+     */
+    h1 {
+        +"YAML-to-Kotlin GitHub Actions workflows converter"
+    }
     br {}
     TextField {
         multiline = true
@@ -56,6 +66,7 @@ val App = FC<Props> {
             setYamlToConvert(event.target.asDynamic().value as String)
         }
     }
+
     TextField {
         multiline = true
         rows = 10

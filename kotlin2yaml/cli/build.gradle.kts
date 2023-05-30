@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.scriptGenerator.logic)
+    implementation(projects.kotlin2yaml.logic)
 }
 
 application {

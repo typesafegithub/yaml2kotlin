@@ -4,11 +4,11 @@ apply(from = "./buildSrc/repositories.settings.gradle.kts")
 
 include(
     "library",
-    ":script-generator:logic",
-    ":script-generator:cli",
-    ":script-generator:web",
-    ":script-generator:web:api",
-    ":script-generator:web:ui",
+    ":kotlin2yaml:logic",
+    ":kotlin2yaml:cli",
+    ":kotlin2yaml:web",
+    ":kotlin2yaml:web:api",
+    ":kotlin2yaml:web:ui",
     ":automation:typings",
     ":automation:wrapper-generator",
 )

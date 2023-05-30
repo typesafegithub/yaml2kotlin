@@ -8,8 +8,8 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.scriptGenerator.logic)
-    implementation(projects.scriptGenerator.web.api)
+    implementation(projects.kotlin2yaml.logic)
+    implementation(projects.kotlin2yaml.web.api)
 
     implementation(platform("io.ktor:ktor-bom:2.3.0"))
     implementation("io.ktor:ktor-server-core")
@@ -38,8 +38,8 @@ tasks.processResources {
 tasks["sourcesJar"].dependsOn(tasks.processResources)
 
 val copyJsBundleToResources by tasks.registering(Copy::class) {
-    dependsOn(":script-generator:web:ui:build")
-    from("$rootDir/script-generator/web/ui/build/distributions")
+    dependsOn(":yaml2kotlin:web:ui:build")
+    from("$rootDir/yaml2kotlin/web/ui/build/distributions")
     into(targetJsBundleDir)
 }
 
