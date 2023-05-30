@@ -21,13 +21,17 @@ You can add your own workflows there.
 
 To create the Kotlin script, run the tests
 
-`$ ./gradlew yaml2kotlin:test`
+```bash
+$ ./gradlew yaml2kotlin:test
+```
 
 ## Running the web interface
 
 The web interface can be run via
 
-`$ ./gradlew web:run`
+```bash
+$ ./gradlew web:run
+```
 
 Then open `http://0.0.0.0:8080/`
 
@@ -35,6 +39,6 @@ Copy-paste a YAML workflow from the `samples` folder
 
 **The web interface is experimental**
 
-[Have a look at the issues](https://gthub.com/typesafegithub/yaml2kotlin/issues)
+▶️ [Have a look at the issues](https://gthub.com/typesafegithub/yaml2kotlin/issues)
 
 

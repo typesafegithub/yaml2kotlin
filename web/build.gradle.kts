@@ -8,7 +8,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.kotlin2yaml)
+    implementation(projects.yaml2kotlin)
     implementation(projects.web.api)
 
     implementation(platform("io.ktor:ktor-bom:2.3.0"))

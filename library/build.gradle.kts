@@ -68,9 +68,9 @@ val validateDuplicatedVersion by tasks.creating<Task> {
                 .contains("  version: $version")
         ) { "Library version stated in the docs should be equal to $version!" }
         require(
-            project.rootDir.resolve("kotlin2yaml/logic/src/main/kotlin/io/github/typesafegithub/workflows/scriptgenerator/Version.kt").readText()
+            project.rootDir.resolve("yaml2kotlin/logic/src/main/kotlin/io/github/typesafegithub/workflows/scriptgenerator/Version.kt").readText()
                 .contains("val LIBRARY_VERSION = \"$version\"")
-        ) { "Library version stated in kotlin2yaml/.../Version.kt should be equal to $version!" }
+        ) { "Library version stated in yaml2kotlin/.../Version.kt should be equal to $version!" }
         require(
             project.file("src/test/kotlin/io/github/typesafegithub/workflows/docsnippets/GettingStartedSnippets.kt").readText()
                 .contains("\"io.github.typesafegithub:github-workflows-kt:$version\"")

@@ -4,7 +4,7 @@ apply(from = "./buildSrc/repositories.settings.gradle.kts")
 
 include(
     "library",
-    ":kotlin2yaml",
+    ":yaml2kotlin",
     ":web",
     ":web:api",
     ":web:ui",
