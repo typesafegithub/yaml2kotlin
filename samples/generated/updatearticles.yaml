@@ -1,0 +1,23 @@
+# This file was generated using Kotlin DSL (.github/workflows/updatearticles.main.kts).
+# If you want to modify the workflow, please change the Kotlin file and regenerate this YAML file.
+# Generated with https://github.com/typesafegithub/github-workflows-kt
+
+name: 'Update Articles'
+on:
+  schedule:
+  - cron: '30 23 * * *'
+  workflow_dispatch: {}
+jobs:
+  run-script:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - id: 'step-0'
+      name: 'CheckoutV2'
+      uses: 'actions/checkout@v2'
+    - id: 'step-1'
+      name: 'Run script to get articles from dev.to'
+      run: |
+        ./scripts/post_files_from_GET_json.sh
+    - id: 'step-2'
+      name: 'Commit to the repo'
+      run: 'git config --global user.name ''Bruno Drugowick'''

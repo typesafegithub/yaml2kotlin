@@ -1,0 +1,31 @@
+# This file was generated using Kotlin DSL (.github/workflows/e2etests.main.kts).
+# If you want to modify the workflow, please change the Kotlin file and regenerate this YAML file.
+# Generated with https://github.com/typesafegithub/github-workflows-kt
+
+name: 'E2E tests'
+on:
+  pull_request:
+    types:
+    - 'opened'
+    - 'synchronize'
+    - 'reopened'
+    branches:
+    - 'develop'
+  push:
+    branches:
+    - 'develop'
+jobs:
+  cypress-run:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - id: 'step-0'
+      name: 'Checkout'
+      uses: 'actions/checkout@v1'
+    - id: 'step-1'
+      name: 'Setup npm package'
+      run: 'npm install'
+    - id: 'step-2'
+      name: 'Run E2E test'
+      uses: 'cypress-io/github-action@v1'
+      with:
+        config: 'baseUrl=https://seedxb.com'

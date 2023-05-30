@@ -1,0 +1,43 @@
+# This file was generated using Kotlin DSL (.github/workflows/getblogposts.main.kts).
+# If you want to modify the workflow, please change the Kotlin file and regenerate this YAML file.
+# Generated with https://github.com/typesafegithub/github-workflows-kt
+
+name: 'Get latest blog posts'
+on:
+  schedule:
+  - cron: '0 0 * * *'
+  workflow_dispatch: {}
+jobs:
+  update_profile_data:
+    name: 'Get latest blog posts'
+    runs-on: 'ubuntu-latest'
+    steps:
+    - id: 'step-0'
+      name: 'CheckoutV2'
+      uses: 'actions/checkout@v2'
+    - id: 'step-1'
+      name: 'SetupNodeV3'
+      uses: 'actions/setup-node@v3'
+      with:
+        node-version: '16.17.1'
+    - id: 'step-2'
+      name: 'Get blog posts'
+      env:
+        DEV_API_KEY: '${{ secrets.DEV_API_KEY }}'
+      run: |
+        npm install
+        node --experimental-fetch bin/generateDevToPosts.js
+        node bin/generateHashnodeUrlMapping.js
+    - id: 'step-3'
+      name: 'Commit changes'
+      env:
+        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "<>"
+        git pull origin main
+        git add .
+        if [[ -n "$(git status --porcelain)" ]]; then
+          git commit -m "chore (automated): update blog posts"
+          git push origin main
+        fi

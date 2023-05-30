@@ -1,0 +1,32 @@
+# This file was generated using Kotlin DSL (.github/workflows/semanticrelease.main.kts).
+# If you want to modify the workflow, please change the Kotlin file and regenerate this YAML file.
+# Generated with https://github.com/typesafegithub/github-workflows-kt
+
+name: 'Semantic release'
+on:
+  push:
+    branches:
+    - 'master'
+jobs:
+  publish:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - id: 'step-0'
+      name: 'CheckoutV2'
+      uses: 'actions/checkout@v2'
+    - id: 'step-1'
+      name: 'Setup Node.js'
+      uses: 'actions/setup-node@v1'
+      with:
+        node-version: '12'
+    - id: 'step-2'
+      name: 'Install dependencies'
+      run: 'npm install'
+    - id: 'step-3'
+      name: 'Build app'
+      run: 'npm run build'
+    - id: 'step-4'
+      name: 'Semantic release'
+      env:
+        GITHUB_TOKEN: '${{ secrets.GH_TOKEN }}'
+      run: 'npx semantic-release'

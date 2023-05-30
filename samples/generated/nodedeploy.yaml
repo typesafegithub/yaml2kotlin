@@ -1,0 +1,41 @@
+# This file was generated using Kotlin DSL (.github/workflows/nodedeploy.main.kts).
+# If you want to modify the workflow, please change the Kotlin file and regenerate this YAML file.
+# Generated with https://github.com/typesafegithub/github-workflows-kt
+
+name: 'Node Deploy'
+on:
+  push:
+    branches:
+    - 'master'
+jobs:
+  build-and-deploy:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - id: 'step-0'
+      name: 'Checkout'
+      uses: 'actions/checkout@v1'
+    - id: 'step-1'
+      name: 'SetupNodeV1'
+      uses: 'actions/setup-node@v1'
+      with:
+        node-version: '10.x'
+    - id: 'step-2'
+      name: 'CacheV1'
+      uses: 'actions/cache@v1'
+      with:
+        path: '~/.npm'
+        key: '${{ runner.os }}-node-${{ hashFiles(''**/package-lock.json'') }}'
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - id: 'step-3'
+      name: 'Build'
+      run: |
+        npm install
+        npm run-script deploy
+    - id: 'step-4'
+      name: 'Deploy'
+      uses: 'JamesIves/github-pages-deploy-action@releases'
+      with:
+        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        BRANCH: 'gh-pages'
+        FOLDER: 'dist/angular-ci-cd'

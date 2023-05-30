@@ -1,0 +1,86 @@
+# This file was generated using Kotlin DSL (.github/workflows/deployenvironments.main.kts).
+# If you want to modify the workflow, please change the Kotlin file and regenerate this YAML file.
+# Generated with https://github.com/typesafegithub/github-workflows-kt
+
+name: 'Deploy Environments'
+on:
+  pull_request: {}
+  push: {}
+  workflow_dispatch: {}
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - id: 'step-0'
+      name: 'CheckoutV2'
+      uses: 'actions/checkout@v2'
+    - id: 'step-1'
+      name: 'Run a one-line script'
+      run: 'echo Hello, world!'
+    - id: 'step-2'
+      name: 'Run a multi-line script'
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+  deploy-staging:
+    runs-on: 'ubuntu-latest'
+    needs:
+    - 'build'
+    steps:
+    - id: 'step-0'
+      name: 'CheckoutV2'
+      uses: 'actions/checkout@v2'
+    - id: 'step-1'
+      name: 'Run a one-line script'
+      run: 'echo Hello, world!'
+    - id: 'step-2'
+      name: 'Run a multi-line script'
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+  test-site:
+    name: 'Test on ${{ matrix.browser }}'
+    runs-on: 'ubuntu-latest'
+    needs:
+    - 'deploy-staging'
+    steps:
+    - id: 'step-0'
+      name: 'Run a one-line script'
+      run: 'echo Hello, world!'
+    - id: 'step-1'
+      name: 'Run a multi-line script'
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+  deploy-production:
+    runs-on: 'ubuntu-latest'
+    needs:
+    - 'test-site'
+    steps:
+    - id: 'step-0'
+      name: 'CheckoutV2'
+      uses: 'actions/checkout@v2'
+    - id: 'step-1'
+      name: 'Run a one-line script'
+      run: 'echo Hello, world!'
+    - id: 'step-2'
+      name: 'Run a multi-line script'
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+  deploy-review:
+    runs-on: 'ubuntu-latest'
+    needs:
+    - 'build'
+    steps:
+    - id: 'step-0'
+      name: 'CheckoutV2'
+      uses: 'actions/checkout@v2'
+    - id: 'step-1'
+      name: 'Run a one-line script'
+      run: 'echo Hello, world!'
+    - id: 'step-2'
+      name: 'Run a multi-line script'
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.

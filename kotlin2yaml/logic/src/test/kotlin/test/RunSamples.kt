@@ -1,6 +1,7 @@
 package test
 
 import io.github.typesafegithub.workflows.scriptgenerator.decodeYamlWorkflow
+import io.github.typesafegithub.workflows.scriptgenerator.rootProject
 import io.github.typesafegithub.workflows.scriptgenerator.toFileSpec
 import io.github.typesafegithub.workflows.scriptgenerator.workflowVariableName
 import io.github.typesafegithub.workflows.scriptmodel.YamlWorkflow
@@ -13,6 +14,7 @@ import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 import java.io.File
+import kotlin.io.path.absolutePathString
 
 @Suppress("UNUSED_VARIABLE")
 class RunSamples : FunSpec(
@@ -87,10 +89,18 @@ class RunSamples : FunSpec(
             val gitRootDir = tempdir().also {
                 it.resolve(".git").mkdirs()
             }.toPath()
+            println("Path: ${gitRootDir.absolutePathString()}")
             expected.allWorkflows.forEach {
                 it.copy(sourceFile = gitRootDir.resolve(it.sourceFile))
                     .writeToFile(addConsistencyCheck = false)
             }
+            Conventions.generatedYaml.deleteRecursively()
+            Conventions.generatedYaml.mkdirs()
+            gitRootDir.toFile().walk().filter { it.extension == "yaml" }
+                .forEach {
+                    val target = Conventions.generatedYaml.resolve(it.name)
+                    it.copyTo(target, overwrite = true)
+                }
         }
     },
 )
@@ -102,6 +112,7 @@ object Conventions {
     val actualPackage = "package $actual"
     val expectedPackage = "package $expected"
     val workflowsFile = samples.resolve("_ALL_.kt")
+    val generatedYaml = rootProject.resolve("samples/generated")
 }
 
 data class SampleInput(val yamlFile: File) {

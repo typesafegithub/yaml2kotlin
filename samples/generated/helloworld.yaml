@@ -1,0 +1,17 @@
+# This file was generated using Kotlin DSL (.github/workflows/helloworld.main.kts).
+# If you want to modify the workflow, please change the Kotlin file and regenerate this YAML file.
+# Generated with https://github.com/typesafegithub/github-workflows-kt
+
+name: 'HelloWorld'
+on:
+  push: {}
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - id: 'step-0'
+      name: 'CheckoutV2'
+      uses: 'actions/checkout@v2'
+    - id: 'step-1'
+      name: 'Run a one-line script'
+      run: 'echo "Hello, world!"'
