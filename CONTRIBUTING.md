@@ -30,15 +30,15 @@ $ ./gradlew yaml2kotlin:test
 The web interface can be run via
 
 ```bash
-$ ./gradlew web:run
+$ ./gradlew web:ui:run
 ```
 
 Then open `http://0.0.0.0:8080/`
 
-Copy-paste a YAML workflow from the `samples` folder
+The UI shows up, but the REST api doesn't work -> https://github.com/typesafegithub/yaml2kotlin/issues/3
 
-**The web interface is experimental**
 
-▶️ [Have a look at the issues](https://gthub.com/typesafegithub/yaml2kotlin/issues)
+If you have any problem
+▶️ https://gthub.com/typesafegithub/yaml2kotlin/issues
 
 
