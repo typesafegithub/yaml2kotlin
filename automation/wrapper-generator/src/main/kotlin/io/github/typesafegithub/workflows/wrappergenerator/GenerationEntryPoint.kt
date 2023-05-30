@@ -20,14 +20,10 @@ import java.nio.file.Paths
  * Either run this main() function or run this command: ./gradlew :wrapper-generator:run
  */
 fun main() {
-    val listOfWrappersInDocs = Paths.get("docs/supported-actions.md")
-
     // To ensure there are no leftovers from previous generations.
     Paths.get("library/src/gen").toFile().deleteRecursively()
-    listOfWrappersInDocs.toFile().delete()
     generateEventPayloads()
     generateWrappers()
-    generateListOfWrappersForDocs(listOfWrappersInDocs)
 }
 
 private fun generateWrappers() {
