@@ -256,7 +256,7 @@ val rootProject = File(".").canonicalFile.let {
     when (it.name) {
         "github-workflows-kt" -> it
         "" -> it // Root directory in Docker container.
-        else -> it.parentFile.parentFile
+        else -> it.parentFile
     }
 }
 

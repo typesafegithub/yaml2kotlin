@@ -4,10 +4,10 @@ apply(from = "./buildSrc/repositories.settings.gradle.kts")
 
 include(
     "library",
-    ":kotlin2yaml:logic",
-    ":kotlin2yaml:web",
-    ":kotlin2yaml:web:api",
-    ":kotlin2yaml:web:ui",
+    ":kotlin2yaml",
+    ":web",
+    ":web:api",
+    ":web:ui",
     ":automation:typings",
     ":automation:wrapper-generator",
 )
