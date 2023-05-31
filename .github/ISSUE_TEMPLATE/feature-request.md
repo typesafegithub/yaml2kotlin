@@ -1,15 +1,20 @@
 ---
 name: Feature request
 about: Request adding a feature
-title: "<enter action name(s) here>"
+title: "<enter request here>"
 labels: enhancement
 assignees: ''
 
 ---
 
-## Why? 
+### What?
+_Describe the solution you have in mind_
+
+## Why?
 _Explain your context and your intent_
 
-### What?
-_describe possible solutions_
+## Alternative solutions
+_Sometimes the first solution we have in mind is not the simplest_
+
+
 
