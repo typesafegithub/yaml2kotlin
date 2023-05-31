@@ -11,7 +11,7 @@ assignees: ''
 _Describe the missing YAML feature_
 
 
-_Link to the GitHub doc goes here_
+_Direct link to the [GitHub doc](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idenvironment) ?_
 
 
 ## Sample?
