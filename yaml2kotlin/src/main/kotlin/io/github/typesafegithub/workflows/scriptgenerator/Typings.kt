@@ -21,6 +21,14 @@ fun String.orExpression(): CodeBlock {
     }
 }
 
+fun CodeBlock.Builder.addConditionMaybe(condition: String?) {
+    if (condition != null) {
+        add("condition = ")
+            .add(condition.orExpression())
+            .add(",\n")
+    }
+}
+
 private const val EXPR_PREFIX = "\${{"
 private const val EXPR_SUFFIX = "}}"
 

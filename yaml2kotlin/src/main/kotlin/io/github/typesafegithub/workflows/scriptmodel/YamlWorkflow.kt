@@ -1,6 +1,9 @@
 package io.github.typesafegithub.workflows.scriptmodel
 
+import com.squareup.kotlinpoet.CodeBlock
 import io.github.typesafegithub.workflows.domain.Concurrency
+import io.github.typesafegithub.workflows.scriptgenerator.EMPTY
+import io.github.typesafegithub.workflows.scriptgenerator.joinToCode
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,4 +21,9 @@ data class YamlWorkflow(
        jobs:
          ${jobs.entries.joinToString(separator = "\n         ")}
     """.trimIndent()
+
+    fun generateJobs(): CodeBlock =
+        jobs.joinToCode(prefix = CodeBlock.EMPTY, postfix = "", newLineAtEnd = false, separator = "\n") { jobId, yamlJob ->
+            yamlJob.generateJob(jobId)
+        }
 }
