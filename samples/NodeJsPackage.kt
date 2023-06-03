@@ -24,43 +24,44 @@ public val workflowNodejspackage: Workflow = workflow(
       sourceFile = Paths.get(".github/workflows/nodejspackage.main.kts"),
       concurrency = Concurrency(group = "workflow_staging_environment", cancelInProgress = false),
     ) {
-      job(
-        id = "build",
-        runsOn = RunnerType.UbuntuLatest,
-        concurrency = Concurrency(group = "job_staging_environment", cancelInProgress = false),
-      ) {
-        uses(
-          name = "CheckoutV3",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-        )
-        uses(
-          name = "SetupNodeV3",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "setup-node",
-            actionVersion = "v3",
-            inputs = mapOf(
-              "node-version" to "12.x",
-              "registry-url" to "https://npm.pkg.github.com",
-              "scope" to "octocat",
-            )
-          ),
-        )
-        run(
-          name = "npm install",
-          command = "npm install",
-        )
-        run(
-          name = "npm publish",
-          command = "npm publish",
-          env = linkedMapOf(
-            "NODE_AUTH_TOKEN" to "${'$'}",
-          ),
-        )
-      }
+
+        job(
+          id = "build",
+          runsOn = RunnerType.UbuntuLatest,
+          concurrency = Concurrency(group = "job_staging_environment", cancelInProgress = false),
+        ) {
+          uses(
+            name = "CheckoutV3",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+          )
+          uses(
+            name = "SetupNodeV3",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "setup-node",
+              actionVersion = "v3",
+              inputs = mapOf(
+                "node-version" to "12.x",
+                "registry-url" to "https://npm.pkg.github.com",
+                "scope" to "octocat",
+              )
+            ),
+          )
+          run(
+            name = "npm install",
+            command = "npm install",
+          )
+          run(
+            name = "npm publish",
+            command = "npm publish",
+            env = linkedMapOf(
+              "NODE_AUTH_TOKEN" to "${'$'}",
+            ),
+          )
+        }
 
     }

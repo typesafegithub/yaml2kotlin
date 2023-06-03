@@ -76,208 +76,209 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/refreshversionsbuild.main.kts"),
     ) {
-      job(
-        id = "check-all",
-        runsOn = RunnerType.Custom(expr("github.event.inputs.run-on || 'ubuntu-latest'")),
-      ) {
-        run(
-          name = "Enable long paths for git Windows",
-          command = "git config --global core.longpaths true",
-          condition = expr("runner.os == 'Windows'"),
-        )
-        uses(
-          name = "CheckoutV3",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-        )
-        uses(
-          name = "Configure JDK",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "setup-java",
-            actionVersion = "v3",
-            inputs = mapOf(
-              "distribution" to "adopt",
-              "java-version" to "11",
-            )
-          ),
-        )
-        uses(
-          name = "Check plugins and publish them to MavenLocal",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "plugins/gradlew",
-              "build-root-directory" to "plugins",
-              "arguments" to "check publishToMavenLocal --stacktrace",
-            )
-          ),
-        )
-        uses(
-          name = "Run refreshVersions on sample-kotlin",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "sample-kotlin/gradlew",
-              "build-root-directory" to "sample-kotlin",
-              "arguments" to "refreshVersions --stacktrace",
-            )
-          ),
-          condition =
-              expr("github.event_name != 'workflow_dispatch' || github.event.inputs.sample-kotlin == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
-        )
-        uses(
-          name = "Check sample-kotlin",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "sample-kotlin/gradlew",
-              "build-root-directory" to "sample-kotlin",
-              "arguments" to "check --stacktrace --configuration-cache",
-            )
-          ),
-          condition =
-              expr("github.event_name != 'workflow_dispatch' || github.event.inputs.sample-kotlin == 'true'"),
-        )
-        uses(
-          name = "Run refreshVersions on sample-groovy",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "sample-groovy/gradlew",
-              "build-root-directory" to "sample-groovy",
-              "arguments" to "refreshVersions --stacktrace",
-            )
-          ),
-          condition =
-              expr("github.event.inputs.sample-groovy == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
-        )
-        uses(
-          name = "Check sample-groovy",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "sample-groovy/gradlew",
-              "build-root-directory" to "sample-groovy",
-              "arguments" to "check --stacktrace",
-            )
-          ),
-          condition = expr("github.event.inputs.sample-groovy == 'true'"),
-        )
-        uses(
-          name = "Check buildSrc of sample-groovy (simulates IDE Gradle sync)",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "sample-groovy/gradlew",
-              "build-root-directory" to "sample-groovy/buildSrc",
-              "arguments" to "help --stacktrace",
-            )
-          ),
-          condition = expr("github.event.inputs.sample-groovy == 'true'"),
-        )
-        uses(
-          name = "Run refreshVersions on sample-multi-modules",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "sample-multi-modules/gradlew",
-              "build-root-directory" to "sample-multi-modules",
-              "arguments" to "refreshVersions --stacktrace",
-            )
-          ),
-          condition =
-              expr("github.event.inputs.sample-multi-modules == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
-        )
-        uses(
-          name = "Check sample-multi-modules",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "sample-multi-modules/gradlew",
-              "build-root-directory" to "sample-multi-modules",
-              "arguments" to "check --stacktrace",
-            )
-          ),
-          condition = expr("github.event.inputs.sample-multi-modules == 'true'"),
-        )
-        uses(
-          name = "Run refreshVersions on sample-kotlin-js",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "sample-kotlin-js/gradlew",
-              "build-root-directory" to "sample-kotlin-js",
-              "arguments" to "refreshVersions --stacktrace",
-            )
-          ),
-          condition =
-              expr("github.event.inputs.sample-kotlin-js == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
-        )
-        uses(
-          name = "Check sample-kotlin-js",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "sample-kotlin-js/gradlew",
-              "build-root-directory" to "sample-kotlin-js",
-              "arguments" to "check --stacktrace",
-            )
-          ),
-          condition = expr("github.event.inputs.sample-kotlin-js == 'true'"),
-        )
-        uses(
-          name = "Run refreshVersions on sample-android",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "sample-android/gradlew",
-              "build-root-directory" to "sample-android",
-              "arguments" to "refreshVersions --stacktrace",
-            )
-          ),
-          condition =
-              expr("github.event.inputs.sample-android == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
-        )
-        uses(
-          name = "Check sample-android",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "gradle-executable" to "sample-android/gradlew",
-              "build-root-directory" to "sample-android",
-              "arguments" to "check --stacktrace",
-            )
-          ),
-          condition = expr("github.event.inputs.sample-android == 'true'"),
-        )
-      }
+
+        job(
+          id = "check-all",
+          runsOn = RunnerType.Custom(expr("github.event.inputs.run-on || 'ubuntu-latest'")),
+        ) {
+          run(
+            name = "Enable long paths for git Windows",
+            command = "git config --global core.longpaths true",
+            condition = expr("runner.os == 'Windows'"),
+          )
+          uses(
+            name = "CheckoutV3",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+          )
+          uses(
+            name = "Configure JDK",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "setup-java",
+              actionVersion = "v3",
+              inputs = mapOf(
+                "distribution" to "adopt",
+                "java-version" to "11",
+              )
+            ),
+          )
+          uses(
+            name = "Check plugins and publish them to MavenLocal",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "plugins/gradlew",
+                "build-root-directory" to "plugins",
+                "arguments" to "check publishToMavenLocal --stacktrace",
+              )
+            ),
+          )
+          uses(
+            name = "Run refreshVersions on sample-kotlin",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "sample-kotlin/gradlew",
+                "build-root-directory" to "sample-kotlin",
+                "arguments" to "refreshVersions --stacktrace",
+              )
+            ),
+            condition =
+                expr("github.event_name != 'workflow_dispatch' || github.event.inputs.sample-kotlin == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
+          )
+          uses(
+            name = "Check sample-kotlin",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "sample-kotlin/gradlew",
+                "build-root-directory" to "sample-kotlin",
+                "arguments" to "check --stacktrace --configuration-cache",
+              )
+            ),
+            condition =
+                expr("github.event_name != 'workflow_dispatch' || github.event.inputs.sample-kotlin == 'true'"),
+          )
+          uses(
+            name = "Run refreshVersions on sample-groovy",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "sample-groovy/gradlew",
+                "build-root-directory" to "sample-groovy",
+                "arguments" to "refreshVersions --stacktrace",
+              )
+            ),
+            condition =
+                expr("github.event.inputs.sample-groovy == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
+          )
+          uses(
+            name = "Check sample-groovy",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "sample-groovy/gradlew",
+                "build-root-directory" to "sample-groovy",
+                "arguments" to "check --stacktrace",
+              )
+            ),
+            condition = expr("github.event.inputs.sample-groovy == 'true'"),
+          )
+          uses(
+            name = "Check buildSrc of sample-groovy (simulates IDE Gradle sync)",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "sample-groovy/gradlew",
+                "build-root-directory" to "sample-groovy/buildSrc",
+                "arguments" to "help --stacktrace",
+              )
+            ),
+            condition = expr("github.event.inputs.sample-groovy == 'true'"),
+          )
+          uses(
+            name = "Run refreshVersions on sample-multi-modules",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "sample-multi-modules/gradlew",
+                "build-root-directory" to "sample-multi-modules",
+                "arguments" to "refreshVersions --stacktrace",
+              )
+            ),
+            condition =
+                expr("github.event.inputs.sample-multi-modules == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
+          )
+          uses(
+            name = "Check sample-multi-modules",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "sample-multi-modules/gradlew",
+                "build-root-directory" to "sample-multi-modules",
+                "arguments" to "check --stacktrace",
+              )
+            ),
+            condition = expr("github.event.inputs.sample-multi-modules == 'true'"),
+          )
+          uses(
+            name = "Run refreshVersions on sample-kotlin-js",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "sample-kotlin-js/gradlew",
+                "build-root-directory" to "sample-kotlin-js",
+                "arguments" to "refreshVersions --stacktrace",
+              )
+            ),
+            condition =
+                expr("github.event.inputs.sample-kotlin-js == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
+          )
+          uses(
+            name = "Check sample-kotlin-js",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "sample-kotlin-js/gradlew",
+                "build-root-directory" to "sample-kotlin-js",
+                "arguments" to "check --stacktrace",
+              )
+            ),
+            condition = expr("github.event.inputs.sample-kotlin-js == 'true'"),
+          )
+          uses(
+            name = "Run refreshVersions on sample-android",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "sample-android/gradlew",
+                "build-root-directory" to "sample-android",
+                "arguments" to "refreshVersions --stacktrace",
+              )
+            ),
+            condition =
+                expr("github.event.inputs.sample-android == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
+          )
+          uses(
+            name = "Check sample-android",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "gradle-executable" to "sample-android/gradlew",
+                "build-root-directory" to "sample-android",
+                "arguments" to "check --stacktrace",
+              )
+            ),
+            condition = expr("github.event.inputs.sample-android == 'true'"),
+          )
+        }
 
     }

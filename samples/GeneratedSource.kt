@@ -51,100 +51,102 @@ public val workflowGeneratedsource: Workflow = workflow(
         "GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED" to "true",
       ),
     ) {
-      job(
-        id = "check_yaml_consistency",
-        name = "Check YAML consistency",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "Check out",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "Install Kotlin",
-          command = "sudo snap install --classic kotlin",
-        )
-        run(
-          name = "Consistency check",
-          command = "diff -u '.github/workflows/build.yaml' <('.github/workflows/build.main.kts')",
-          env = linkedMapOf(
-            "HELLO" to "ok",
-            "PAT" to "rick",
-          ),
-          condition = "true",
-        )
-      }
 
-      job(
-        id = "build_for_UbuntuLatest",
-        runsOn = RunnerType.UbuntuLatest,
-        env = linkedMapOf(
-          "COLOR" to "blue",
-          "SIZE" to "XXL",
-        ),
+        job(
+          id = "check_yaml_consistency",
+          name = "Check YAML consistency",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "Check out",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "Install Kotlin",
+            command = "sudo snap install --classic kotlin",
+          )
+          run(
+            name = "Consistency check",
+            command =
+                "diff -u '.github/workflows/build.yaml' <('.github/workflows/build.main.kts')",
+            env = linkedMapOf(
+              "HELLO" to "ok",
+              "PAT" to "rick",
+            ),
+            condition = "true",
+          )
+        }
 
-        _customArguments = mapOf(
-        "needs" to listOf("check_yaml_consistency"),
-        )
-      ) {
-        uses(
-          name = "Checkout",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
+        job(
+          id = "build_for_UbuntuLatest",
+          runsOn = RunnerType.UbuntuLatest,
           env = linkedMapOf(
-            "HELLO" to "ok",
-            "PAT" to "rick",
+            "COLOR" to "blue",
+            "SIZE" to "XXL",
           ),
-        )
-        uses(
-          name = "Set up JDK",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "setup-java",
-            actionVersion = "v3",
-            inputs = mapOf(
-              "java-version" to "11",
-              "distribution" to "adopt",
-            )
-          ),
-          env = linkedMapOf(
-            "HELLO" to "ok",
-            "PAT" to "rick",
-          ),
-        )
-        uses(
-          name = "Build",
-          action = CustomAction(
-            actionOwner = "gradle",
-            actionName = "gradle-build-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "arguments" to "build",
-            )
-          ),
-        )
-        uses(
-          name = "setup",
-          action = CustomAction(
-            actionOwner = "docker",
-            actionName = "setup-buildx-action",
-            actionVersion = "v1",
-            inputs = mapOf(
-              "driver-opts" to """
-              |hello
-              |world
-              |""".trimMargin(),
-              "install" to "true",
-            )
-          ),
-        )
-      }
+
+          _customArguments = mapOf(
+          "needs" to listOf("check_yaml_consistency"),
+          )
+        ) {
+          uses(
+            name = "Checkout",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+            env = linkedMapOf(
+              "HELLO" to "ok",
+              "PAT" to "rick",
+            ),
+          )
+          uses(
+            name = "Set up JDK",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "setup-java",
+              actionVersion = "v3",
+              inputs = mapOf(
+                "java-version" to "11",
+                "distribution" to "adopt",
+              )
+            ),
+            env = linkedMapOf(
+              "HELLO" to "ok",
+              "PAT" to "rick",
+            ),
+          )
+          uses(
+            name = "Build",
+            action = CustomAction(
+              actionOwner = "gradle",
+              actionName = "gradle-build-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "arguments" to "build",
+              )
+            ),
+          )
+          uses(
+            name = "setup",
+            action = CustomAction(
+              actionOwner = "docker",
+              actionName = "setup-buildx-action",
+              actionVersion = "v1",
+              inputs = mapOf(
+                "driver-opts" to """
+                |hello
+                |world
+                |""".trimMargin(),
+                "install" to "true",
+              )
+            ),
+          )
+        }
 
     }

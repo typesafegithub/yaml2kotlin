@@ -18,49 +18,50 @@ public val workflowIntegration04: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/integration04.main.kts"),
     ) {
-      job(
-        id = "check_yaml_consistency",
-        name = "Check YAML consistency",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "Check out",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "Execute script",
-          command =
-              "rm '.github/workflows/some_workflow.yaml' && '.github/workflows/some_workflow.main.kts'",
-        )
-        run(
-          name = "Consistency check",
-          command = "git diff --exit-code '.github/workflows/some_workflow.yaml'",
-        )
-      }
 
-      job(
-        id = "test_job",
-        runsOn = RunnerType.UbuntuLatest,
-        _customArguments = mapOf(
-        "needs" to listOf("check_yaml_consistency"),
-        )
-      ) {
-        uses(
-          name = "Check out",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "Hello world!",
-          command = "echo 'hello!'",
-        )
-      }
+        job(
+          id = "check_yaml_consistency",
+          name = "Check YAML consistency",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "Check out",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "Execute script",
+            command =
+                "rm '.github/workflows/some_workflow.yaml' && '.github/workflows/some_workflow.main.kts'",
+          )
+          run(
+            name = "Consistency check",
+            command = "git diff --exit-code '.github/workflows/some_workflow.yaml'",
+          )
+        }
+
+        job(
+          id = "test_job",
+          runsOn = RunnerType.UbuntuLatest,
+          _customArguments = mapOf(
+          "needs" to listOf("check_yaml_consistency"),
+          )
+        ) {
+          uses(
+            name = "Check out",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "Hello world!",
+            command = "echo 'hello!'",
+          )
+        }
 
     }

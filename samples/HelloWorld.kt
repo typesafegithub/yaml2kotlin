@@ -16,22 +16,23 @@ public val workflowHelloworld: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/helloworld.main.kts"),
     ) {
-      job(
-        id = "build",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "CheckoutV2",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v2",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "Run a one-line script",
-          command = "echo \"Hello, world!\"",
-        )
-      }
+
+        job(
+          id = "build",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "CheckoutV2",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v2",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "Run a one-line script",
+            command = "echo \"Hello, world!\"",
+          )
+        }
 
     }

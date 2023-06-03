@@ -19,64 +19,65 @@ public val workflowNodedeploy: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/nodedeploy.main.kts"),
     ) {
-      job(
-        id = "build-and-deploy",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "Checkout",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v1",
-            inputs = emptyMap()),
-        )
-        uses(
-          name = "SetupNodeV1",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "setup-node",
-            actionVersion = "v1",
-            inputs = mapOf(
-              "node-version" to "10.x",
-            )
-          ),
-        )
-        uses(
-          name = "CacheV1",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "cache",
-            actionVersion = "v1",
-            inputs = mapOf(
-              "path" to "~/.npm",
-              "key" to "${'$'}{{ runner.os }}-node-${'$'}{{ hashFiles('**/package-lock.json') }}",
-              "restore-keys" to """
-              |${'$'}{{ runner.os }}-node-
-              |""".trimMargin(),
-            )
-          ),
-        )
-        run(
-          name = "Build",
-          command = """
-          |npm install
-          |npm run-script deploy
-          |""".trimMargin(),
-        )
-        uses(
-          name = "Deploy",
-          action = CustomAction(
-            actionOwner = "JamesIves",
-            actionName = "github-pages-deploy-action",
-            actionVersion = "releases/v3",
-            inputs = mapOf(
-              "GITHUB_TOKEN" to "${'$'}{{ secrets.GITHUB_TOKEN }}",
-              "BRANCH" to "gh-pages",
-              "FOLDER" to "dist/angular-ci-cd",
-            )
-          ),
-        )
-      }
+
+        job(
+          id = "build-and-deploy",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "Checkout",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v1",
+              inputs = emptyMap()),
+          )
+          uses(
+            name = "SetupNodeV1",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "setup-node",
+              actionVersion = "v1",
+              inputs = mapOf(
+                "node-version" to "10.x",
+              )
+            ),
+          )
+          uses(
+            name = "CacheV1",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "cache",
+              actionVersion = "v1",
+              inputs = mapOf(
+                "path" to "~/.npm",
+                "key" to "${'$'}{{ runner.os }}-node-${'$'}{{ hashFiles('**/package-lock.json') }}",
+                "restore-keys" to """
+                |${'$'}{{ runner.os }}-node-
+                |""".trimMargin(),
+              )
+            ),
+          )
+          run(
+            name = "Build",
+            command = """
+            |npm install
+            |npm run-script deploy
+            |""".trimMargin(),
+          )
+          uses(
+            name = "Deploy",
+            action = CustomAction(
+              actionOwner = "JamesIves",
+              actionName = "github-pages-deploy-action",
+              actionVersion = "releases/v3",
+              inputs = mapOf(
+                "GITHUB_TOKEN" to "${'$'}{{ secrets.GITHUB_TOKEN }}",
+                "BRANCH" to "gh-pages",
+                "FOLDER" to "dist/angular-ci-cd",
+              )
+            ),
+          )
+        }
 
     }

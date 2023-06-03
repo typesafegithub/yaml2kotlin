@@ -147,18 +147,19 @@ public val workflowAlltriggers: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/alltriggers.main.kts"),
     ) {
-      job(
-        id = "job-0",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "Check out",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-        )
-      }
+
+        job(
+          id = "job-0",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "Check out",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+          )
+        }
 
     }

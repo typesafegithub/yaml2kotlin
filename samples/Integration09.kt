@@ -18,46 +18,47 @@ public val workflowIntegration09: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/integration09.main.kts"),
     ) {
-      job(
-        id = "check_yaml_consistency",
-        name = "Check YAML consistency",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "Check out",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "Consistency check",
-          command =
-              "diff -u '.github/workflows/some_workflow.yaml' <('.github/workflows/some_workflow.main.kts')",
-        )
-      }
 
-      job(
-        id = "test_job",
-        name = "Test Job",
-        runsOn = RunnerType.UbuntuLatest,
-        _customArguments = mapOf(
-        "needs" to listOf("check_yaml_consistency"),
-        )
-      ) {
-        uses(
-          name = "CheckoutV3",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "echo 'hello!'",
-          command = "echo 'hello!'",
-        )
-      }
+        job(
+          id = "check_yaml_consistency",
+          name = "Check YAML consistency",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "Check out",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "Consistency check",
+            command =
+                "diff -u '.github/workflows/some_workflow.yaml' <('.github/workflows/some_workflow.main.kts')",
+          )
+        }
+
+        job(
+          id = "test_job",
+          name = "Test Job",
+          runsOn = RunnerType.UbuntuLatest,
+          _customArguments = mapOf(
+          "needs" to listOf("check_yaml_consistency"),
+          )
+        ) {
+          uses(
+            name = "CheckoutV3",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "echo 'hello!'",
+            command = "echo 'hello!'",
+          )
+        }
 
     }

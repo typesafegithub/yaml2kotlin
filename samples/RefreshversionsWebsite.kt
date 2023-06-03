@@ -21,41 +21,42 @@ public val workflowRefreshversionswebsite: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/refreshversionswebsite.main.kts"),
     ) {
-      job(
-        id = "deploy",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "CheckoutV3",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "./docs/DocsCopier.main.kts",
-          command = "./docs/DocsCopier.main.kts",
-        )
-        uses(
-          name = "SetupPythonV2",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "setup-python",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "python-version" to "3.x",
-            )
-          ),
-        )
-        run(
-          name = "pip install -r docs/requirements.txt",
-          command = "pip install -r docs/requirements.txt",
-        )
-        run(
-          name = "mkdocs gh-deploy --force",
-          command = "mkdocs gh-deploy --force",
-        )
-      }
+
+        job(
+          id = "deploy",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "CheckoutV3",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "./docs/DocsCopier.main.kts",
+            command = "./docs/DocsCopier.main.kts",
+          )
+          uses(
+            name = "SetupPythonV2",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "setup-python",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "python-version" to "3.x",
+              )
+            ),
+          )
+          run(
+            name = "pip install -r docs/requirements.txt",
+            command = "pip install -r docs/requirements.txt",
+          )
+          run(
+            name = "mkdocs gh-deploy --force",
+            command = "mkdocs gh-deploy --force",
+          )
+        }
 
     }

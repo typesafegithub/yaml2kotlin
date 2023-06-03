@@ -23,66 +23,67 @@ public val workflowUpdategradlewrapper: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/updategradlewrapper.main.kts"),
     ) {
-      job(
-        id = "check_yaml_consistency",
-        name = "Check YAML consistency",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "Check out",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-          condition = "true",
-        )
-        run(
-          name = "Install Kotlin",
-          command = "sudo snap install --classic kotlin",
-        )
-        run(
-          name = "Consistency check",
-          command =
-              "diff -u '.github/workflows/update-gradle-wrapper.yml' <('.github/workflows/update-gradle-wrapper.main.kts')",
-        )
-      }
 
-      job(
-        id = "update-gradle-wrapper",
-        runsOn = RunnerType.UbuntuLatest,
-        _customArguments = mapOf(
-        "needs" to listOf("check_yaml_consistency"),
-        )
-      ) {
-        uses(
-          name = "Checkout",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-        )
-        uses(
-          name = "Update Gradle Wrapper",
-          action = CustomAction(
-            actionOwner = "gradle-update",
-            actionName = "update-gradle-wrapper-action",
-            actionVersion = "v1",
-            inputs = emptyMap()),
-        )
-        uses(
-          name = "Latex",
-          action = CustomAction(
-            actionOwner = "xu-cheng",
-            actionName = "latex-action",
-            actionVersion = "v2",
-            inputs = mapOf(
-              "root_file" to "report.tex",
-              "compiler" to "latexmk",
-            )
-          ),
-        )
-      }
+        job(
+          id = "check_yaml_consistency",
+          name = "Check YAML consistency",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "Check out",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+            condition = "true",
+          )
+          run(
+            name = "Install Kotlin",
+            command = "sudo snap install --classic kotlin",
+          )
+          run(
+            name = "Consistency check",
+            command =
+                "diff -u '.github/workflows/update-gradle-wrapper.yml' <('.github/workflows/update-gradle-wrapper.main.kts')",
+          )
+        }
+
+        job(
+          id = "update-gradle-wrapper",
+          runsOn = RunnerType.UbuntuLatest,
+          _customArguments = mapOf(
+          "needs" to listOf("check_yaml_consistency"),
+          )
+        ) {
+          uses(
+            name = "Checkout",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+          )
+          uses(
+            name = "Update Gradle Wrapper",
+            action = CustomAction(
+              actionOwner = "gradle-update",
+              actionName = "update-gradle-wrapper-action",
+              actionVersion = "v1",
+              inputs = emptyMap()),
+          )
+          uses(
+            name = "Latex",
+            action = CustomAction(
+              actionOwner = "xu-cheng",
+              actionName = "latex-action",
+              actionVersion = "v2",
+              inputs = mapOf(
+                "root_file" to "report.tex",
+                "compiler" to "latexmk",
+              )
+            ),
+          )
+        }
 
     }

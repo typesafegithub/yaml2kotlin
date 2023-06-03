@@ -16,23 +16,24 @@ public val workflowIntegration14: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/integration14.main.kts"),
     ) {
-      job(
-        id = "test_job",
-        name = "Test Job",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "CheckoutV3",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "echo 'hello!'",
-          command = "echo 'hello!'",
-        )
-      }
+
+        job(
+          id = "test_job",
+          name = "Test Job",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "CheckoutV3",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "echo 'hello!'",
+            command = "echo 'hello!'",
+          )
+        }
 
     }

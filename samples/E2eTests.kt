@@ -25,33 +25,34 @@ public val workflowE2etests: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/e2etests.main.kts"),
     ) {
-      job(
-        id = "cypress-run",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "Checkout",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v1",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "Setup npm package",
-          command = "npm install",
-        )
-        uses(
-          name = "Run E2E test",
-          action = CustomAction(
-            actionOwner = "cypress-io",
-            actionName = "github-action",
-            actionVersion = "v1",
-            inputs = mapOf(
-              "config" to "baseUrl=https://seedxb.com",
-            )
-          ),
-        )
-      }
+
+        job(
+          id = "cypress-run",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "Checkout",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v1",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "Setup npm package",
+            command = "npm install",
+          )
+          uses(
+            name = "Run E2E test",
+            action = CustomAction(
+              actionOwner = "cypress-io",
+              actionName = "github-action",
+              actionVersion = "v1",
+              inputs = mapOf(
+                "config" to "baseUrl=https://seedxb.com",
+              )
+            ),
+          )
+        }
 
     }

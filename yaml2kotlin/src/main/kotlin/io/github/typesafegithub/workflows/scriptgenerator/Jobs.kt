@@ -10,46 +10,57 @@ import io.github.typesafegithub.workflows.scriptmodel.runnerTypeBlockOf
 import io.github.typesafegithub.workflows.wrappergenerator.generation.buildActionClassName
 import io.github.typesafegithub.workflows.wrappergenerator.types.provideTypes
 
-fun YamlWorkflow.generateJobs() = CodeBlock { builder ->
-    jobs.forEach { (jobId, job) ->
-        builder.add("job(\n")
-            .indent()
-            .add("id = %S,\n", jobId)
-        if (job.name != null) builder.add("name = %S,\n", job.name)
-        builder.add(runnerTypeBlockOf(job.runsOn))
-        builder.add(concurrencyOf(job.concurrency))
-        builder.add(
-            job.env.joinToCode(
-                ifEmpty = CodeBlock.EMPTY,
-                prefix = CodeBlock.of("env = %M(", Members.linkedMapOf),
-                postfix = "),\n",
-                transform = { key, value -> CodeBlock.of("%S to %S", key, value) },
-            ),
-        )
-        builder.add(job.customArguments())
-        builder.unindent()
-        builder.add(") {\n")
-        builder.indent()
-        job.steps.forEach { step ->
-            if (step.uses != null) {
-                val coords = ActionCoords(step.uses)
-                val (owner, name) = coords
-                val availableWrappers = wrappersToGenerate.filter {
-                    val (theOwner, theName) = it.actionCoords
-                    owner == theOwner && name == theName
-                }
-                val wrapper: WrapperRequest? = availableWrappers.firstOrNull {
-                    it.actionCoords.buildActionClassName() == coords.buildActionClassName()
-                } ?: availableWrappers.maxByOrNull { it.actionCoords.version }
-                val _customVersion = coords.version.takeIf { it != wrapper?.actionCoords?.version }
-                val inputTypings = wrapper?.provideTypes()
-                builder.add(step.generateAction(wrapper?.actionCoords ?: coords, inputTypings, _customVersion))
-            } else {
-                builder.add(step.generateCommand())
-            }
+fun YamlWorkflow.generateJobs() =
+    jobs.joinToCode(prefix = CodeBlock.EMPTY, postfix = "", newLineAtEnd = false, separator = "\n") { jobId, yamlJob ->
+        yamlJob.generateJob(jobId)
+    }
+
+fun YamlJob.generateJob(jobId: String) = CodeBlock { builder ->
+    builder.add("job(\n")
+        .indent()
+        .add("id = %S,\n", jobId)
+    if (name != null) {
+        builder.add("name = %S,\n", name)
+    }
+    builder.add(runnerTypeBlockOf(runsOn))
+    builder.add(concurrencyOf(concurrency))
+    builder.add(
+        env.joinToCode(
+            ifEmpty = CodeBlock.EMPTY,
+            prefix = CodeBlock.of("env = %M(", Members.linkedMapOf),
+            postfix = "),\n",
+            transform = { key, value -> CodeBlock.of("%S to %S", key, value) },
+        ),
+    )
+    builder.add(customArguments())
+    builder.unindent()
+    builder.add(") {\n")
+    builder.indent()
+    steps.forEach { step ->
+        step.generate(builder)
+    }
+    builder.unindent()
+        .add("}\n\n")
+}
+
+private fun YamlStep.generate(
+    builder: CodeBlock.Builder,
+) {
+    if (uses != null) {
+        val coords = ActionCoords(uses)
+        val (owner, name) = coords
+        val availableWrappers = wrappersToGenerate.filter {
+            val (theOwner, theName) = it.actionCoords
+            owner == theOwner && name == theName
         }
-        builder.unindent()
-            .add("}\n\n")
+        val wrapper: WrapperRequest? = availableWrappers.firstOrNull {
+            it.actionCoords.buildActionClassName() == coords.buildActionClassName()
+        } ?: availableWrappers.maxByOrNull { it.actionCoords.version }
+        val _customVersion = coords.version.takeIf { it != wrapper?.actionCoords?.version }
+        val inputTypings = wrapper?.provideTypes()
+        builder.add(generateAction(wrapper?.actionCoords ?: coords, inputTypings, _customVersion))
+    } else {
+        builder.add(generateCommand())
     }
 }
 

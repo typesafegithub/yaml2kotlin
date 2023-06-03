@@ -22,134 +22,135 @@ public val workflowDeployenvironments: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/deployenvironments.main.kts"),
     ) {
-      job(
-        id = "build",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "CheckoutV2",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v2",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "Run a one-line script",
-          command = "echo Hello, world!",
-        )
-        run(
-          name = "Run a multi-line script",
-          command = """
-          |echo Add other actions to build,
-          |echo test, and deploy your project.
-          |""".trimMargin(),
-        )
-      }
 
-      job(
-        id = "deploy-staging",
-        runsOn = RunnerType.UbuntuLatest,
-        _customArguments = mapOf(
-        "needs" to listOf("build"),
-        )
-      ) {
-        uses(
-          name = "CheckoutV2",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v2",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "Run a one-line script",
-          command = "echo Hello, world!",
-        )
-        run(
-          name = "Run a multi-line script",
-          command = """
-          |echo Add other actions to build,
-          |echo test, and deploy your project.
-          |""".trimMargin(),
-        )
-      }
+        job(
+          id = "build",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "CheckoutV2",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v2",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "Run a one-line script",
+            command = "echo Hello, world!",
+          )
+          run(
+            name = "Run a multi-line script",
+            command = """
+            |echo Add other actions to build,
+            |echo test, and deploy your project.
+            |""".trimMargin(),
+          )
+        }
 
-      job(
-        id = "test-site",
-        name = "Test on ${'$'}{{ matrix.browser }}",
-        runsOn = RunnerType.UbuntuLatest,
-        _customArguments = mapOf(
-        "needs" to listOf("deploy-staging"),
-        )
-      ) {
-        run(
-          name = "Run a one-line script",
-          command = "echo Hello, world!",
-        )
-        run(
-          name = "Run a multi-line script",
-          command = """
-          |echo Add other actions to build,
-          |echo test, and deploy your project.
-          |""".trimMargin(),
-        )
-      }
+        job(
+          id = "deploy-staging",
+          runsOn = RunnerType.UbuntuLatest,
+          _customArguments = mapOf(
+          "needs" to listOf("build"),
+          )
+        ) {
+          uses(
+            name = "CheckoutV2",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v2",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "Run a one-line script",
+            command = "echo Hello, world!",
+          )
+          run(
+            name = "Run a multi-line script",
+            command = """
+            |echo Add other actions to build,
+            |echo test, and deploy your project.
+            |""".trimMargin(),
+          )
+        }
 
-      job(
-        id = "deploy-production",
-        runsOn = RunnerType.UbuntuLatest,
-        _customArguments = mapOf(
-        "needs" to listOf("test-site"),
-        )
-      ) {
-        uses(
-          name = "CheckoutV2",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v2",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "Run a one-line script",
-          command = "echo Hello, world!",
-        )
-        run(
-          name = "Run a multi-line script",
-          command = """
-          |echo Add other actions to build,
-          |echo test, and deploy your project.
-          |""".trimMargin(),
-        )
-      }
+        job(
+          id = "test-site",
+          name = "Test on ${'$'}{{ matrix.browser }}",
+          runsOn = RunnerType.UbuntuLatest,
+          _customArguments = mapOf(
+          "needs" to listOf("deploy-staging"),
+          )
+        ) {
+          run(
+            name = "Run a one-line script",
+            command = "echo Hello, world!",
+          )
+          run(
+            name = "Run a multi-line script",
+            command = """
+            |echo Add other actions to build,
+            |echo test, and deploy your project.
+            |""".trimMargin(),
+          )
+        }
 
-      job(
-        id = "deploy-review",
-        runsOn = RunnerType.UbuntuLatest,
-        _customArguments = mapOf(
-        "needs" to listOf("build"),
-        )
-      ) {
-        uses(
-          name = "CheckoutV2",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v2",
-            inputs = emptyMap()),
-        )
-        run(
-          name = "Run a one-line script",
-          command = "echo Hello, world!",
-        )
-        run(
-          name = "Run a multi-line script",
-          command = """
-          |echo Add other actions to build,
-          |echo test, and deploy your project.
-          |""".trimMargin(),
-        )
-      }
+        job(
+          id = "deploy-production",
+          runsOn = RunnerType.UbuntuLatest,
+          _customArguments = mapOf(
+          "needs" to listOf("test-site"),
+          )
+        ) {
+          uses(
+            name = "CheckoutV2",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v2",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "Run a one-line script",
+            command = "echo Hello, world!",
+          )
+          run(
+            name = "Run a multi-line script",
+            command = """
+            |echo Add other actions to build,
+            |echo test, and deploy your project.
+            |""".trimMargin(),
+          )
+        }
+
+        job(
+          id = "deploy-review",
+          runsOn = RunnerType.UbuntuLatest,
+          _customArguments = mapOf(
+          "needs" to listOf("build"),
+          )
+        ) {
+          uses(
+            name = "CheckoutV2",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v2",
+              inputs = emptyMap()),
+          )
+          run(
+            name = "Run a one-line script",
+            command = "echo Hello, world!",
+          )
+          run(
+            name = "Run a multi-line script",
+            command = """
+            |echo Add other actions to build,
+            |echo test, and deploy your project.
+            |""".trimMargin(),
+          )
+        }
 
     }

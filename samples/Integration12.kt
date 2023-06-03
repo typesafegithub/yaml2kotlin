@@ -15,14 +15,15 @@ public val workflowIntegration12: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/integration12.main.kts"),
     ) {
-      job(
-        id = "test",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        run(
-          name = "echo 'Hello!'",
-          command = "echo 'Hello!'",
-        )
-      }
+
+        job(
+          id = "test",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          run(
+            name = "echo 'Hello!'",
+            command = "echo 'Hello!'",
+          )
+        }
 
     }

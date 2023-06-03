@@ -19,44 +19,45 @@ public val workflowSemanticrelease: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/semanticrelease.main.kts"),
     ) {
-      job(
-        id = "publish",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "CheckoutV2",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v2",
-            inputs = emptyMap()),
-        )
-        uses(
-          name = "Setup Node.js",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "setup-node",
-            actionVersion = "v1",
-            inputs = mapOf(
-              "node-version" to "12",
-            )
-          ),
-        )
-        run(
-          name = "Install dependencies",
-          command = "npm install",
-        )
-        run(
-          name = "Build app",
-          command = "npm run build",
-        )
-        run(
-          name = "Semantic release",
-          command = "npx semantic-release",
-          env = linkedMapOf(
-            "GITHUB_TOKEN" to expr("secrets.GH_TOKEN"),
-          ),
-        )
-      }
+
+        job(
+          id = "publish",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "CheckoutV2",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v2",
+              inputs = emptyMap()),
+          )
+          uses(
+            name = "Setup Node.js",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "setup-node",
+              actionVersion = "v1",
+              inputs = mapOf(
+                "node-version" to "12",
+              )
+            ),
+          )
+          run(
+            name = "Install dependencies",
+            command = "npm install",
+          )
+          run(
+            name = "Build app",
+            command = "npm run build",
+          )
+          run(
+            name = "Semantic release",
+            command = "npx semantic-release",
+            env = linkedMapOf(
+              "GITHUB_TOKEN" to expr("secrets.GH_TOKEN"),
+            ),
+          )
+        }
 
     }

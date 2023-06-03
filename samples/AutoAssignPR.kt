@@ -22,22 +22,23 @@ public val workflowAutoassignpr: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/autoassignpr.main.kts"),
     ) {
-      job(
-        id = "auto-assign",
-        runsOn = RunnerType.UbuntuLatest,
-      ) {
-        uses(
-          name = "Auto-assign PR",
-          action = CustomAction(
-            actionOwner = "pozil",
-            actionName = "auto-assign-issue",
-            actionVersion = "v1",
-            inputs = mapOf(
-              "assignees" to "deraowl",
-              "repo-token" to "${'$'}{{ secrets.GITHUB_TOKEN }}",
-            )
-          ),
-        )
-      }
+
+        job(
+          id = "auto-assign",
+          runsOn = RunnerType.UbuntuLatest,
+        ) {
+          uses(
+            name = "Auto-assign PR",
+            action = CustomAction(
+              actionOwner = "pozil",
+              actionName = "auto-assign-issue",
+              actionVersion = "v1",
+              inputs = mapOf(
+                "assignees" to "deraowl",
+                "repo-token" to "${'$'}{{ secrets.GITHUB_TOKEN }}",
+              )
+            ),
+          )
+        }
 
     }

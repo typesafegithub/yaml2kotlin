@@ -25,47 +25,48 @@ public val workflowIntegration05: Workflow = workflow(
         """.trimMargin(),
       ),
     ) {
-      job(
-        id = "test_job",
-        runsOn = RunnerType.UbuntuLatest,
-        env = linkedMapOf(
-          "SIMPLE_VAR" to "simple-value-job",
-          "MULTILINE_VAR" to """
-          |hey,
-          |hi,
-          |hello! job
-          """.trimMargin(),
-        ),
 
-      ) {
-        uses(
-          name = "Check out",
-          action = CustomAction(
-            actionOwner = "actions",
-            actionName = "checkout",
-            actionVersion = "v3",
-            inputs = emptyMap()),
+        job(
+          id = "test_job",
+          runsOn = RunnerType.UbuntuLatest,
           env = linkedMapOf(
-            "SIMPLE_VAR" to "simple-value-uses",
+            "SIMPLE_VAR" to "simple-value-job",
             "MULTILINE_VAR" to """
             |hey,
             |hi,
-            |hello! uses
+            |hello! job
             """.trimMargin(),
           ),
-        )
-        run(
-          name = "Hello world!",
-          command = "echo 'hello!'",
-          env = linkedMapOf(
-            "SIMPLE_VAR" to "simple-value-run",
-            "MULTILINE_VAR" to """
-            |hey,
-            |hi,
-            |hello! run
-            """.trimMargin(),
-          ),
-        )
-      }
+
+        ) {
+          uses(
+            name = "Check out",
+            action = CustomAction(
+              actionOwner = "actions",
+              actionName = "checkout",
+              actionVersion = "v3",
+              inputs = emptyMap()),
+            env = linkedMapOf(
+              "SIMPLE_VAR" to "simple-value-uses",
+              "MULTILINE_VAR" to """
+              |hey,
+              |hi,
+              |hello! uses
+              """.trimMargin(),
+            ),
+          )
+          run(
+            name = "Hello world!",
+            command = "echo 'hello!'",
+            env = linkedMapOf(
+              "SIMPLE_VAR" to "simple-value-run",
+              "MULTILINE_VAR" to """
+              |hey,
+              |hi,
+              |hello! run
+              """.trimMargin(),
+            ),
+          )
+        }
 
     }
