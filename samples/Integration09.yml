@@ -10,7 +10,7 @@ jobs:
   check_yaml_consistency:
     name: 'Check YAML consistency'
     runs-on: 'ubuntu-latest'
-    if: ${{ always() }}'
+    if: ${{ always() }}
     steps:
       - id: 'step-0'
         name: 'Check out'

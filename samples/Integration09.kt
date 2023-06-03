@@ -23,6 +23,7 @@ public val workflowIntegration09: Workflow = workflow(
           id = "check_yaml_consistency",
           name = "Check YAML consistency",
           runsOn = RunnerType.UbuntuLatest,
+          condition = expr { "always()" },
         ) {
           uses(
             name = "Check out",

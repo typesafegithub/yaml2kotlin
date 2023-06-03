@@ -55,7 +55,7 @@ public val workflowSemanticrelease: Workflow = workflow(
             name = "Semantic release",
             command = "npx semantic-release",
             env = linkedMapOf(
-              "GITHUB_TOKEN" to expr("secrets.GH_TOKEN"),
+              "GITHUB_TOKEN" to expr { "secrets.GH_TOKEN" },
             ),
           )
         }

@@ -47,7 +47,7 @@ public val workflowGeneratedsource: Workflow = workflow(
         ),
       sourceFile = Paths.get(".github/workflows/generatedsource.main.kts"),
       env = linkedMapOf(
-        "GRADLE_ENTERPRISE_ACCESS_KEY" to expr("secrets.GRADLE_ENTERPRISE_ACCESS_KEY"),
+        "GRADLE_ENTERPRISE_ACCESS_KEY" to expr { "secrets.GRADLE_ENTERPRISE_ACCESS_KEY" },
         "GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED" to "true",
       ),
     ) {

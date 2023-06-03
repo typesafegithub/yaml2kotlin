@@ -79,12 +79,12 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
 
         job(
           id = "check-all",
-          runsOn = RunnerType.Custom(expr("github.event.inputs.run-on || 'ubuntu-latest'")),
+          runsOn = RunnerType.Custom(expr { "github.event.inputs.run-on || 'ubuntu-latest'" }),
         ) {
           run(
             name = "Enable long paths for git Windows",
             command = "git config --global core.longpaths true",
-            condition = expr("runner.os == 'Windows'"),
+            condition = expr { "runner.os == 'Windows'" },
           )
           uses(
             name = "CheckoutV3",
@@ -131,8 +131,9 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
                 "arguments" to "refreshVersions --stacktrace",
               )
             ),
-            condition =
-                expr("github.event_name != 'workflow_dispatch' || github.event.inputs.sample-kotlin == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
+            condition = expr {
+                "github.event_name != 'workflow_dispatch' || github.event.inputs.sample-kotlin == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"
+                },
           )
           uses(
             name = "Check sample-kotlin",
@@ -146,8 +147,9 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
                 "arguments" to "check --stacktrace --configuration-cache",
               )
             ),
-            condition =
-                expr("github.event_name != 'workflow_dispatch' || github.event.inputs.sample-kotlin == 'true'"),
+            condition = expr {
+                "github.event_name != 'workflow_dispatch' || github.event.inputs.sample-kotlin == 'true'"
+                },
           )
           uses(
             name = "Run refreshVersions on sample-groovy",
@@ -161,8 +163,9 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
                 "arguments" to "refreshVersions --stacktrace",
               )
             ),
-            condition =
-                expr("github.event.inputs.sample-groovy == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
+            condition = expr {
+                "github.event.inputs.sample-groovy == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"
+                },
           )
           uses(
             name = "Check sample-groovy",
@@ -176,7 +179,7 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
                 "arguments" to "check --stacktrace",
               )
             ),
-            condition = expr("github.event.inputs.sample-groovy == 'true'"),
+            condition = expr { "github.event.inputs.sample-groovy == 'true'" },
           )
           uses(
             name = "Check buildSrc of sample-groovy (simulates IDE Gradle sync)",
@@ -190,7 +193,7 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
                 "arguments" to "help --stacktrace",
               )
             ),
-            condition = expr("github.event.inputs.sample-groovy == 'true'"),
+            condition = expr { "github.event.inputs.sample-groovy == 'true'" },
           )
           uses(
             name = "Run refreshVersions on sample-multi-modules",
@@ -204,8 +207,9 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
                 "arguments" to "refreshVersions --stacktrace",
               )
             ),
-            condition =
-                expr("github.event.inputs.sample-multi-modules == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
+            condition = expr {
+                "github.event.inputs.sample-multi-modules == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"
+                },
           )
           uses(
             name = "Check sample-multi-modules",
@@ -219,7 +223,7 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
                 "arguments" to "check --stacktrace",
               )
             ),
-            condition = expr("github.event.inputs.sample-multi-modules == 'true'"),
+            condition = expr { "github.event.inputs.sample-multi-modules == 'true'" },
           )
           uses(
             name = "Run refreshVersions on sample-kotlin-js",
@@ -233,8 +237,9 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
                 "arguments" to "refreshVersions --stacktrace",
               )
             ),
-            condition =
-                expr("github.event.inputs.sample-kotlin-js == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
+            condition = expr {
+                "github.event.inputs.sample-kotlin-js == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"
+                },
           )
           uses(
             name = "Check sample-kotlin-js",
@@ -248,7 +253,7 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
                 "arguments" to "check --stacktrace",
               )
             ),
-            condition = expr("github.event.inputs.sample-kotlin-js == 'true'"),
+            condition = expr { "github.event.inputs.sample-kotlin-js == 'true'" },
           )
           uses(
             name = "Run refreshVersions on sample-android",
@@ -262,8 +267,9 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
                 "arguments" to "refreshVersions --stacktrace",
               )
             ),
-            condition =
-                expr("github.event.inputs.sample-android == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"),
+            condition = expr {
+                "github.event.inputs.sample-android == 'true' && github.event.inputs.run-refreshVersions-task == 'true'"
+                },
           )
           uses(
             name = "Check sample-android",
@@ -277,7 +283,7 @@ public val workflowRefreshversionsbuild: Workflow = workflow(
                 "arguments" to "check --stacktrace",
               )
             ),
-            condition = expr("github.event.inputs.sample-android == 'true'"),
+            condition = expr { "github.event.inputs.sample-android == 'true'" },
           )
         }
 

@@ -25,7 +25,7 @@ public val workflowDockerimage: Workflow = workflow(
       sourceFile = Paths.get(".github/workflows/dockerimage.main.kts"),
       env = linkedMapOf(
         "REGISTRY" to "ghcr.io",
-        "IMAGE_NAME" to expr("github.repository"),
+        "IMAGE_NAME" to expr { "github.repository" },
       ),
     ) {
 

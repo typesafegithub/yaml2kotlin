@@ -20,6 +20,7 @@ jobs:
         hey,
         hi,
         hello! job
+    if: '${{ always() }}'
     steps:
     - id: 'step-0'
       name: 'Check out'

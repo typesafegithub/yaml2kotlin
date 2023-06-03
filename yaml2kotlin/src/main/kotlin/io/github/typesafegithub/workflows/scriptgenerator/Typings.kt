@@ -1,25 +1,9 @@
 package io.github.typesafegithub.workflows.scriptgenerator
 
 import com.squareup.kotlinpoet.CodeBlock
-import io.github.typesafegithub.workflows.actionsmetadata.model.ActionCoords
-import io.github.typesafegithub.workflows.actionsmetadata.model.BooleanTyping
-import io.github.typesafegithub.workflows.actionsmetadata.model.EnumTyping
-import io.github.typesafegithub.workflows.actionsmetadata.model.IntegerTyping
-import io.github.typesafegithub.workflows.actionsmetadata.model.IntegerWithSpecialValueTyping
-import io.github.typesafegithub.workflows.actionsmetadata.model.ListOfTypings
-import io.github.typesafegithub.workflows.actionsmetadata.model.Typing
+import io.github.typesafegithub.workflows.actionsmetadata.model.*
 import io.github.typesafegithub.workflows.wrappergenerator.generation.buildActionClassName
 import io.github.typesafegithub.workflows.wrappergenerator.generation.toPascalCase
-
-fun String.orExpression(): CodeBlock {
-    val input = trim()
-    if (input.startsWith(EXPR_PREFIX) && endsWith(EXPR_SUFFIX)) {
-        val expression = input.removeSuffix(EXPR_SUFFIX).removePrefix(EXPR_PREFIX).trim()
-        return CodeBlock.of("expr(%S)", expression)
-    } else {
-        return CodeBlock.of("%S", input)
-    }
-}
 
 fun CodeBlock.Builder.addConditionMaybe(condition: String?) {
     if (condition != null) {
@@ -29,8 +13,6 @@ fun CodeBlock.Builder.addConditionMaybe(condition: String?) {
     }
 }
 
-private const val EXPR_PREFIX = "\${{"
-private const val EXPR_SUFFIX = "}}"
 
 fun valueWithTyping(value: String, typing: Typing, coords: ActionCoords): CodeBlock {
     val classname = coords.buildActionClassName()
@@ -55,6 +37,7 @@ fun valueWithTyping(value: String, typing: Typing, coords: ActionCoords): CodeBl
                 val specialValue = typing.specialValues.keys.first { typing.specialValues[it] == value.toInt() }
                 CodeBlock.of("%L", "$classname.${typing.typeName}.${specialValue.toPascalCase()}")
             }
+
             false -> CodeBlock.of("%L", "$classname.${typing.typeName}.Value($value)")
         }
 
@@ -69,6 +52,7 @@ fun valueWithTyping(value: String, typing: Typing, coords: ActionCoords): CodeBl
                 valueWithTyping(elem, typing.typing, coords)
             }
         }
+
         else ->
             CodeBlock.of("%S", value)
     }

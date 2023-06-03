@@ -29,6 +29,7 @@ public val workflowIntegration05: Workflow = workflow(
         job(
           id = "test_job",
           runsOn = RunnerType.UbuntuLatest,
+          condition = expr { "always()" },
           env = linkedMapOf(
             "SIMPLE_VAR" to "simple-value-job",
             "MULTILINE_VAR" to """

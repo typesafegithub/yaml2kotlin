@@ -55,7 +55,7 @@ public val workflowGetblogposts: Workflow = workflow(
             |node bin/generateHashnodeUrlMapping.js
             |""".trimMargin(),
             env = linkedMapOf(
-              "DEV_API_KEY" to expr("secrets.DEV_API_KEY"),
+              "DEV_API_KEY" to expr { "secrets.DEV_API_KEY" },
             ),
           )
           run(
@@ -71,7 +71,7 @@ public val workflowGetblogposts: Workflow = workflow(
             |fi
             |""".trimMargin(),
             env = linkedMapOf(
-              "GITHUB_TOKEN" to expr("secrets.GITHUB_TOKEN"),
+              "GITHUB_TOKEN" to expr { "secrets.GITHUB_TOKEN" },
             ),
           )
         }

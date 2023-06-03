@@ -51,6 +51,7 @@ public val workflowDeployenvironments: Workflow = workflow(
         job(
           id = "deploy-staging",
           runsOn = RunnerType.UbuntuLatest,
+          condition = "github.ref == 'refs/heads/main'",
           _customArguments = mapOf(
           "needs" to listOf("build"),
           )
@@ -100,6 +101,7 @@ public val workflowDeployenvironments: Workflow = workflow(
         job(
           id = "deploy-production",
           runsOn = RunnerType.UbuntuLatest,
+          condition = "github.ref == 'refs/heads/main'",
           _customArguments = mapOf(
           "needs" to listOf("test-site"),
           )
@@ -128,6 +130,7 @@ public val workflowDeployenvironments: Workflow = workflow(
         job(
           id = "deploy-review",
           runsOn = RunnerType.UbuntuLatest,
+          condition = "github.event_name == 'pull_request'",
           _customArguments = mapOf(
           "needs" to listOf("build"),
           )

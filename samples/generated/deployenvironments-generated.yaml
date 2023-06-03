@@ -24,6 +24,7 @@ jobs:
         echo test, and deploy your project.
   deploy-staging:
     runs-on: 'ubuntu-latest'
+    if: 'github.ref == ''refs/heads/main'''
     needs:
     - 'build'
     steps:
@@ -54,6 +55,7 @@ jobs:
         echo test, and deploy your project.
   deploy-production:
     runs-on: 'ubuntu-latest'
+    if: 'github.ref == ''refs/heads/main'''
     needs:
     - 'test-site'
     steps:
@@ -70,6 +72,7 @@ jobs:
         echo test, and deploy your project.
   deploy-review:
     runs-on: 'ubuntu-latest'
+    if: 'github.event_name == ''pull_request'''
     needs:
     - 'build'
     steps:

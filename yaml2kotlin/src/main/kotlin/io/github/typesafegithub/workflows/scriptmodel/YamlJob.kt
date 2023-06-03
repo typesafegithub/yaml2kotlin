@@ -14,6 +14,7 @@ data class YamlJob(
     val steps: List<YamlStep>,
     val needs: List<String> = emptyList(),
     val env: LinkedHashMap<String, String> = linkedMapOf(),
+    @SerialName("if")
     val condition: String? = null,
     val strategyMatrix: Map<String, List<String>>? = null,
     val concurrency: Concurrency? = null,
@@ -27,6 +28,7 @@ data class YamlJob(
         }
         builder.add(runnerTypeBlockOf(runsOn))
         builder.add(concurrencyOf(concurrency))
+        builder.addConditionMaybe(condition)
         builder.add(
             env.joinToCode(
                 ifEmpty = CodeBlock.EMPTY,

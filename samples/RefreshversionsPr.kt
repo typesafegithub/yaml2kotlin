@@ -61,7 +61,7 @@ public val workflowRefreshversionspr: Workflow = workflow(
               )
             ),
             env = linkedMapOf(
-              "GITHUB_TOKEN" to expr("secrets.GITHUB_TOKEN"),
+              "GITHUB_TOKEN" to expr { "secrets.GITHUB_TOKEN" },
             ),
           )
           uses(

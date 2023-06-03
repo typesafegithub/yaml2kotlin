@@ -7,4 +7,5 @@ object Members {
     val linkedMapOf = MemberName("kotlin.collections", "linkedMapOf")
     val mapOf = MemberName("kotlin.collections", "mapOf")
     val listOf = MemberName("kotlin.collections", "listOf")
+    val expr = MemberName("io.github.typesafegithub.workflows.dsl.expressions", "expr")
 }
