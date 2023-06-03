@@ -21,7 +21,8 @@ import kotlin.io.path.absolutePathString
 class RunSamples : FunSpec(
     {
         test("Generate one Kotlin file") {
-            sampleFiles.find { it.name == "NodeDeploy.yml" }
+            val testFileName = "Integration09.yml"
+            sampleFiles.find { it.name == testFileName }
                 ?.also { generateKotlinFile(it) }
                 ?: let { System.err.println("Test skipped, no file found") }
         }
@@ -94,7 +95,8 @@ private fun copyYamlFilesToGeneratedFolder(gitRootDir: Path) {
     Conventions.generatedYaml.mkdirs()
     gitRootDir.toFile().walk().filter { it.extension == "yaml" }
         .forEach {
-            val target = Conventions.generatedYaml.resolve(it.name)
+            val targetName = "${it.nameWithoutExtension}-generated.${it.extension}"
+            val target = Conventions.generatedYaml.resolve(targetName)
             it.copyTo(target, overwrite = true)
         }
 }
