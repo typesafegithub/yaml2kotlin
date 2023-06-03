@@ -69,7 +69,7 @@ public val workflowNodedeploy: Workflow = workflow(
           action = CustomAction(
             actionOwner = "JamesIves",
             actionName = "github-pages-deploy-action",
-            actionVersion = "releases",
+            actionVersion = "releases/v3",
             inputs = mapOf(
               "GITHUB_TOKEN" to "${'$'}{{ secrets.GITHUB_TOKEN }}",
               "BRANCH" to "gh-pages",

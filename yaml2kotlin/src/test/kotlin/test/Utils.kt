@@ -5,7 +5,9 @@ import java.io.File
 
 val samples = rootProject.resolve("samples")
 
-val sampleFiles: List<File> = samples.listFiles()?.toList() ?: emptyList()
+val sampleFiles: List<File> = samples.listFiles()
+    ?.filter { it.extension in Conventions.yamlSuffixes }
+    ?: emptyList()
 
 fun isGitHubActions() =
     System.getenv("GITHUB_ACTIONS") == "true"

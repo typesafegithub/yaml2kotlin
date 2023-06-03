@@ -30,7 +30,6 @@ private fun readLocalActionTypings(): List<WrapperRequest> {
         .map {
             val pathParts = it.toFile().invariantSeparatorsPath.split("/") - "."
             // pathParts[0] is "actions" directory
-            println("pathParts: $pathParts")
             val owner = pathParts[1]
             val name = pathParts[2]
             val version = pathParts[3]

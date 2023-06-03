@@ -34,7 +34,7 @@ jobs:
         npm run-script deploy
     - id: 'step-4'
       name: 'Deploy'
-      uses: 'JamesIves/github-pages-deploy-action@releases'
+      uses: 'JamesIves/github-pages-deploy-action@releases/v3'
       with:
         GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         BRANCH: 'gh-pages'

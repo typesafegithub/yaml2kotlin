@@ -134,7 +134,8 @@ fun YamlStep.generateCustomAction(
 }
 
 fun ActionCoords(yaml: String): ActionCoords {
-    val (owner, name, version) = yaml.split("/", "@")
+    val (repo, version) = yaml.split("@")
+    val (owner, name) = repo.split("/")
     return ActionCoords(owner, name, version)
 }
 

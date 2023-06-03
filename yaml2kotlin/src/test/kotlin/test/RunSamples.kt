@@ -14,11 +14,27 @@ import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 import java.io.File
+import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 
 @Suppress("UNUSED_VARIABLE")
 class RunSamples : FunSpec(
     {
+        test("Generate one Kotlin file") {
+            sampleFiles.find { it.name == "NodeDeploy.yml" }
+                ?.also { generateKotlinFile(it) }
+                ?: let { System.err.println("Test skipped, no file found") }
+        }
+
+        context("Generate Kotlin files") {
+            sampleFiles.forEach { sample ->
+                test("/samples/${sample.nameWithoutExtension}.kt from yaml") {
+                    generateKotlinFile(sample)
+                }
+            }
+        }
+
+
         val files = sampleFiles
 
         test("Folder /samples must exist") {
@@ -57,33 +73,7 @@ class RunSamples : FunSpec(
             Conventions.workflowsFile.writeText(workflowsList(workflowVariableNames))
         }
 
-        context("Generate Kotlin files") {
 
-            sampleFiles.forEach { sample ->
-                test("/samples/${sample.nameWithoutExtension}.kt from yaml") {
-                    val regex = "[A-Z][A-Za-z0-9]+\\.(yaml|yml)".toRegex()
-                    sample.name.shouldMatch(regex)
-
-                    val input = SampleInput(sample)
-                    val yaml = input.yamlFile.readText()
-                    val workflow: YamlWorkflow = decodeYamlWorkflow(yaml)
-                    val newContent = workflow
-                        .toFileSpec(input.filename)
-                        .toString()
-                        .withoutPackages()
-
-                    input.kotlinFile.writeText(
-                        "package expected\n$newContent",
-                    )
-
-                    if (isGitHubActions()) {
-                        newContent shouldBe input.expected
-                    } else if (newContent != input.expected) {
-                        fail("Double-check changes to samples/${input.kotlinFile.name}")
-                    }
-                }
-            }
-        }
 
         test("Execute Kotlin Scripts") {
             val gitRootDir = tempdir().also {
@@ -94,16 +84,44 @@ class RunSamples : FunSpec(
                 it.copy(sourceFile = gitRootDir.resolve(it.sourceFile))
                     .writeToFile(addConsistencyCheck = false)
             }
-            Conventions.generatedYaml.deleteRecursively()
-            Conventions.generatedYaml.mkdirs()
-            gitRootDir.toFile().walk().filter { it.extension == "yaml" }
-                .forEach {
-                    val target = Conventions.generatedYaml.resolve(it.name)
-                    it.copyTo(target, overwrite = true)
-                }
+            copyYamlFilesToGeneratedFolder(gitRootDir)
         }
     },
 )
+
+private fun copyYamlFilesToGeneratedFolder(gitRootDir: Path) {
+    Conventions.generatedYaml.deleteRecursively()
+    Conventions.generatedYaml.mkdirs()
+    gitRootDir.toFile().walk().filter { it.extension == "yaml" }
+        .forEach {
+            val target = Conventions.generatedYaml.resolve(it.name)
+            it.copyTo(target, overwrite = true)
+        }
+}
+
+fun generateKotlinFile(sample: File) {
+    println("generateKotlinFile(samples/${sample.name})")
+    val regex = "[A-Z][A-Za-z0-9]+\\.(yaml|yml)".toRegex()
+    sample.name.shouldMatch(regex)
+
+    val input = SampleInput(sample)
+    val yaml = input.yamlFile.readText()
+    val workflow: YamlWorkflow = decodeYamlWorkflow(yaml)
+    val newContent = workflow
+        .toFileSpec(input.filename)
+        .toString()
+        .withoutPackages()
+
+    input.kotlinFile.writeText(
+        "package expected\n$newContent",
+    )
+
+    if (isGitHubActions()) {
+        newContent shouldBe input.expected
+    } else if (newContent != input.expected) {
+        fail("Double-check changes to samples/${input.kotlinFile.name}")
+    }
+}
 
 object Conventions {
     val yamlSuffixes = setOf("yml", "yaml")
